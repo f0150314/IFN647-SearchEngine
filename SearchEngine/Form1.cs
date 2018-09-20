@@ -13,6 +13,7 @@ using Lucene.Net.Index;
 using Lucene.Net.Documents;
 using Lucene.Net.Analysis;
 using Lucene.Net.Analysis.Standard;
+using Lucene.Net.Analysis.Snowball;
 
 namespace SearchEngine
 {
@@ -31,7 +32,7 @@ namespace SearchEngine
         const string BIBLIO_INFO = "BiblioInfo";
         const string ABSTRACT = "Abstract";
 
-        string[] delimiters = { ".I ", ".T", ".A", ".B", ".W" };
+        
         string indexPath;
 
         public Form1()
@@ -53,6 +54,8 @@ namespace SearchEngine
                 OpenIndex(indexPath);
             }
         }
+
+        // Open index and initialize analyzer and indexWriter
         private void OpenIndex(string indexPath)
         {
             luceneIndexDirectory = FSDirectory.Open(indexPath);
@@ -70,6 +73,8 @@ namespace SearchEngine
                 CleanUpIndexer();
             }
         }
+
+        // Read through all files
         private void WalkDirectoryTree(string collectionPath)
         {
             System.IO.DirectoryInfo root = new System.IO.DirectoryInfo(collectionPath);
@@ -98,7 +103,7 @@ namespace SearchEngine
                 foreach (System.IO.FileInfo fi in files)
                 {
                     string name = fi.FullName;
-                    ReadDocuments(name);
+                    IndexingDocuments(name);
                 }
                 reader.Close();
 
@@ -116,21 +121,18 @@ namespace SearchEngine
             var elapsed = stopwatch.Elapsed;
             MessageBox.Show($"Indexing time: {elapsed} seconds");
         }
-        private void ReadDocuments(string name)
+
+        // Read and preprocess documents
+        private void IndexingDocuments(string name)
         {
+            // Preprocessing document (remove abstract error)
             reader = new System.IO.StreamReader(name);
             string text = reader.ReadToEnd();
-            string[] docInfo = ProcessedDocuments(text);
-            IndexText(docInfo);
-        }
-        private string[] ProcessedDocuments(string text)
-        {
-            string[] docInfo = text.ToLower().Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
+            string[] delimiters = { ".I ", ".T", ".A", ".B", ".W" };
+            string[] docInfo = text.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
             docInfo[4] = docInfo[4].Remove(0, docInfo[1].Length);
-            return docInfo;
-        }
-        private void IndexText(string[] docInfo)
-        {
+
+            // Creating Index for four different fields
             Document doc = new Document();
             doc.Add(new Field(DOC_ID, docInfo[0], Field.Store.YES, Field.Index.NO, Field.TermVector.NO));
             doc.Add(new Field(TITLE, docInfo[1], Field.Store.YES, Field.Index.ANALYZED, Field.TermVector.WITH_POSITIONS_OFFSETS));
@@ -139,6 +141,8 @@ namespace SearchEngine
             doc.Add(new Field(ABSTRACT, docInfo[4], Field.Store.YES, Field.Index.ANALYZED, Field.TermVector.WITH_POSITIONS_OFFSETS));
             writer.AddDocument(doc);
         }
+      
+        // Clean up Indexer
         private void CleanUpIndexer()
         {
             writer.Optimize();
