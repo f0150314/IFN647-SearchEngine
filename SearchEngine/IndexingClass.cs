@@ -33,7 +33,7 @@ namespace SearchEngine
         {
             reader = null;
             luceneIndexDirectory = null;
-            analyzer = null;
+            analyzer = new StandardAnalyzer(VERSION);
             writer = null;
             stopwatch = null;
         }
@@ -42,7 +42,6 @@ namespace SearchEngine
         public void OpenIndex(string DirectoryPath)
         {
             luceneIndexDirectory = FSDirectory.Open(DirectoryPath);
-            analyzer = new StandardAnalyzer(VERSION);
             IndexWriter.MaxFieldLength mfl = new IndexWriter.MaxFieldLength(IndexWriter.DEFAULT_MAX_FIELD_LENGTH);
             writer = new IndexWriter(luceneIndexDirectory, analyzer, true, mfl);
         }

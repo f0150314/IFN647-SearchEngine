@@ -28,11 +28,14 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.folderBuildIndexDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.BuildIndexButton = new System.Windows.Forms.Button();
             this.DirectoryPathLabel = new System.Windows.Forms.Label();
             this.folderCollectionDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.CollectionButton = new System.Windows.Forms.Button();
+            this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             this.SuspendLayout();
             // 
             // BuildIndexButton
@@ -64,16 +67,21 @@
             this.CollectionButton.UseVisualStyleBackColor = true;
             this.CollectionButton.Click += new System.EventHandler(this.CollectionButton_Click);
             // 
+            // errorProvider1
+            // 
+            this.errorProvider1.ContainerControl = this;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(636, 477);
+            this.ClientSize = new System.Drawing.Size(478, 76);
             this.Controls.Add(this.CollectionButton);
             this.Controls.Add(this.DirectoryPathLabel);
             this.Controls.Add(this.BuildIndexButton);
             this.Name = "Form1";
             this.Text = "Form1";
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -84,6 +92,7 @@
         private System.Windows.Forms.Label DirectoryPathLabel;
         private System.Windows.Forms.FolderBrowserDialog folderCollectionDialog;
         private System.Windows.Forms.Button CollectionButton;
+        private System.Windows.Forms.ErrorProvider errorProvider1;
     }
 }
 

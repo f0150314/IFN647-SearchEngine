@@ -13,11 +13,13 @@ namespace SearchEngine
     public partial class Form1 : Form
     {
         IndexingClass indexing;
+        Searching_Form searchForm; 
 
         public Form1()
         {
             InitializeComponent();
             indexing = new IndexingClass();
+            searchForm = new Searching_Form();
         }
 
         private void BuildIndexButton_Click(object sender, EventArgs e)
@@ -35,7 +37,9 @@ namespace SearchEngine
             {
                 string collectionPath = folderCollectionDialog.SelectedPath;
                 indexing.WalkDirectoryTree(collectionPath);
-                indexing.CleanUpIndexer();
+                indexing.CleanUpIndexer();               
+                searchForm.Show();
+                this.Hide();
             }
         }
     }
