@@ -17,11 +17,10 @@ namespace SearchEngine
     public class IndexingClass
     {
         System.IO.StreamReader reader;
-        public static Directory luceneIndexDirectory;
-        public static Analyzer analyzer = new StandardAnalyzer(VERSION);
-        public static Analyzer snowballAnalyzer = new SnowballAnalyzer(VERSION, "English", StopAnalyzer.ENGLISH_STOP_WORDS_SET);
         IndexWriter writer;
-
+        public static Directory luceneIndexDirectory;
+        public static Analyzer analyzer;
+        
         const Lucene.Net.Util.Version VERSION = Lucene.Net.Util.Version.LUCENE_30;
         public static string FieldDOC_ID = "DocID";
         public static string FieldTITLE = "Title";
@@ -44,9 +43,15 @@ namespace SearchEngine
 
             // Decide which analyzer should be used
             if (!processingState)
+            {
+                analyzer = new StandardAnalyzer(VERSION);
                 writer = new IndexWriter(luceneIndexDirectory, analyzer, true, mfl);
+            }
             else
-                writer = new IndexWriter(luceneIndexDirectory, snowballAnalyzer, true, mfl);
+            {
+                analyzer = new SnowballAnalyzer(VERSION, "English", StopAnalyzer.ENGLISH_STOP_WORDS_SET);
+                writer = new IndexWriter(luceneIndexDirectory, analyzer, true, mfl);
+            }
         }
 
         // Read through all files
