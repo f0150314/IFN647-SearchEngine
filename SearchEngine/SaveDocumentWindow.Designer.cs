@@ -37,22 +37,22 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(21, 32);
+            this.label1.Location = new System.Drawing.Point(26, 31);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(48, 13);
+            this.label1.Size = new System.Drawing.Size(51, 13);
             this.label1.TabIndex = 3;
-            this.label1.Text = "Topic ID";
+            this.label1.Text = "Topic ID:";
             // 
             // topicEnter
             // 
-            this.topicEnter.Location = new System.Drawing.Point(99, 29);
+            this.topicEnter.Location = new System.Drawing.Point(83, 28);
             this.topicEnter.Name = "topicEnter";
-            this.topicEnter.Size = new System.Drawing.Size(90, 20);
+            this.topicEnter.Size = new System.Drawing.Size(114, 20);
             this.topicEnter.TabIndex = 4;
             // 
             // SaveDocumentButton
             // 
-            this.SaveDocumentButton.Location = new System.Drawing.Point(209, 26);
+            this.SaveDocumentButton.Location = new System.Drawing.Point(211, 26);
             this.SaveDocumentButton.Name = "SaveDocumentButton";
             this.SaveDocumentButton.Size = new System.Drawing.Size(83, 23);
             this.SaveDocumentButton.TabIndex = 5;
@@ -64,7 +64,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(315, 73);
+            this.ClientSize = new System.Drawing.Size(306, 73);
             this.Controls.Add(this.SaveDocumentButton);
             this.Controls.Add(this.topicEnter);
             this.Controls.Add(this.label1);

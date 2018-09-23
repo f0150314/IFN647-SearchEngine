@@ -53,7 +53,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(482, 77);
+            this.ClientSize = new System.Drawing.Size(482, 89);
             this.Controls.Add(this.SearchButton);
             this.Controls.Add(this.queryEnter);
             this.Name = "Searching_Form";

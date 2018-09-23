@@ -19,8 +19,8 @@ namespace SearchEngine
         System.IO.StreamReader reader;
         public static Directory luceneIndexDirectory;
         public static Analyzer analyzer = new StandardAnalyzer(VERSION);
+        public static Analyzer snowballAnalyzer = new SnowballAnalyzer(VERSION, "English", StopAnalyzer.ENGLISH_STOP_WORDS_SET);
         IndexWriter writer;
-        Stopwatch stopwatch;
 
         const Lucene.Net.Util.Version VERSION = Lucene.Net.Util.Version.LUCENE_30;
         public static string FieldDOC_ID = "DocID";
@@ -34,16 +34,19 @@ namespace SearchEngine
             reader = null;
             luceneIndexDirectory = null;
             writer = null;
-            stopwatch = null;
         }
 
-
         // Open index and initialize analyzer and indexWriter
-        public void OpenIndex(string DirectoryPath)
+        public void OpenIndex(string DirectoryPath, bool processingState)
         {
             luceneIndexDirectory = FSDirectory.Open(DirectoryPath);
             IndexWriter.MaxFieldLength mfl = new IndexWriter.MaxFieldLength(IndexWriter.DEFAULT_MAX_FIELD_LENGTH);
-            writer = new IndexWriter(luceneIndexDirectory, analyzer, true, mfl);
+
+            // Decide which analyzer should be used
+            if (!processingState)
+                writer = new IndexWriter(luceneIndexDirectory, analyzer, true, mfl);
+            else
+                writer = new IndexWriter(luceneIndexDirectory, snowballAnalyzer, true, mfl);
         }
 
         // Read through all files
@@ -69,8 +72,6 @@ namespace SearchEngine
             }
             if (files != null)
             {
-                stopwatch = new Stopwatch();
-                stopwatch.Restart();
                 // Process every file
                 foreach (System.IO.FileInfo fi in files)
                 {
@@ -88,10 +89,7 @@ namespace SearchEngine
                     string name = dirInfo.FullName;
                     WalkDirectoryTree(name);
                 }
-                stopwatch.Stop();
-            }
-            var elapsed = stopwatch.Elapsed;
-            MessageBox.Show($"Indexing time: {elapsed} seconds");
+            }     
         }
 
         // Preprocess documents and add to index
