@@ -16,42 +16,132 @@ namespace SearchEngine
     {
         SaveDocumentWindow saveWindow;
 
-        public SearchedResults(string elapsed, string rawQuery, TopDocs results, Document[] docs)
+        int selectedItem;
+        public static Document[] ranked_docs;
+        public static TopDocs results;
+        int displayBatch;
+
+        public SearchedResults(string rawQuery, string elapsed, TopDocs topResults, Document[] docs)
         {
+            
             InitializeComponent();
+            results = topResults;
+            ranked_docs = docs;
+            previousButton.Hide();
             label1.Text = "Raw input query: " + rawQuery;
             label2.Text = "Searching time: " + elapsed;
             label3.Text = "Total hits: " + results.TotalHits;
-            Document[] ranked_docs = docs;
-            DisplayResult(results, docs);
+            DisplayResult(results, ranked_docs, displayBatch = 0);
+
             saveWindow = new SaveDocumentWindow(results);
         }
 
-        public void DisplayResult(TopDocs results, Document[] docs)
+        public void DisplayResult(TopDocs results, Document[] docs, int displayBatch)
         {
-            for (int i = 0; i < results.TotalHits; i++)
+            /*
+            if (results.TotalHits == 0)
             {
-                ListViewItem item_abstract;
+                DataTable dt = new DataTable();
+                dt.Rows.Add(new object[] { "No mathch" });
+            }
+            */
+            if (displayBatch < results.TotalHits / 10)
+            {
+                DataTable dt = new DataTable();
+                dt.Columns.Add("No.", typeof(int));
+                dt.Columns.Add("Title", typeof(string));
+                dt.Columns.Add("Author", typeof(string));
+                dt.Columns.Add("Biblio_info", typeof(string));
+                dt.Columns.Add("Abstract", typeof(string));
 
-                // Store the first sentence of the document
-                item_abstract = new ListViewItem(docs[i].Get(IndexingClass.FieldABSTRACT).ToString().Split(new[] { '\r', '\n' }).FirstOrDefault());
-                
-                listView1.Items.Add(item_abstract);
-                //ScoreDoc scoreDoc = results.ScoreDocs[i];
-                //Lucene.Net.Documents.Document doc =
-                //item_title = new ListViewItem(results);
+                for (int i = displayBatch * 10; i < displayBatch * 10 + 10; i++)
+                {
+                    // Store the first sentence of the document
+                    dt.Rows.Add(new object[] {i,
+                                          docs[i].Get(IndexingClass.FieldTITLE).ToString(),
+                                          docs[i].Get(IndexingClass.FieldAUTHOR).ToString(),
+                                          docs[i].Get(IndexingClass.FieldBIBLIO_INFO).ToString(),
+                                          docs[i].Get(IndexingClass.FieldABSTRACT).ToString().Split(new[] { '\r', '\n' }).FirstOrDefault()});
+                    dataGridView1.DataSource = dt;
+                    //ScoreDoc scoreDoc = results.ScoreDocs[i];
+                    //Lucene.Net.Documents.Document doc =
+                    //item_title = new ListViewItem(results);
+                }
+            }
 
+            if (displayBatch == results.TotalHits / 10)
+            {
+                DataTable dt = new DataTable();
+                dt.Columns.Add("No.", typeof(int));
+                dt.Columns.Add("Title", typeof(string));
+                dt.Columns.Add("Author", typeof(string));
+                dt.Columns.Add("Biblio_info", typeof(string));
+                dt.Columns.Add("Abstract", typeof(string));
+
+                for (int i = displayBatch * 10; i < results.TotalHits; i++)
+                {
+                    // Store the first sentence of the document
+                    dt.Rows.Add(new object[] {i,
+                                          docs[i].Get(IndexingClass.FieldTITLE).ToString(),
+                                          docs[i].Get(IndexingClass.FieldAUTHOR).ToString(),
+                                          docs[i].Get(IndexingClass.FieldBIBLIO_INFO).ToString(),
+                                          docs[i].Get(IndexingClass.FieldABSTRACT).ToString().Split(new[] { '\r', '\n' }).FirstOrDefault()});
+                    dataGridView1.DataSource = dt;
+                    //ScoreDoc scoreDoc = results.ScoreDocs[i];
+                    //Lucene.Net.Documents.Document doc =
+                    //item_title = new ListViewItem(results);
+                }
             }
         }
 
-        private void listView1_SelectedIndexChanged(object sender, EventArgs e)
+        private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            selectedItem = e.RowIndex;
+        }
+
+        
+        private void saveButton_Click(object sender, EventArgs e)
+        {
+            saveWindow.Show();
+        }
+
+        private void previousButton_Click(object sender, EventArgs e)
+        {
+            displayBatch -= 1;
+            DisplayResult(results, ranked_docs, displayBatch);
+            Next.Show();
+            if (displayBatch == 0)
+            {
+                previousButton.Hide();
+            }
+        }
+
+        private void displayItenButton_Click(object sender, EventArgs e)
+        {
+            DataGridViewRow row = new DataGridViewRow();
+            row = dataGridView1.Rows[selectedItem];
+            string luceneInextOfSelectedItem = row.Cells[0].Value.ToString();
+            int ind = System.Convert.ToInt32(luceneInextOfSelectedItem);
+
+            //Create a new form and display the full abstract (with a cancel/close button)
+            DisplayAbstract displayWindows = new DisplayAbstract(ind, ranked_docs);
+            displayWindows.Show();
+        }
+
+        private void label1_Click(object sender, EventArgs e)
         {
 
         }
 
-        private void saveButton_Click(object sender, EventArgs e)
+        private void Next_Click_1(object sender, EventArgs e)
         {
-            saveWindow.Show();
+            displayBatch++;
+            DisplayResult(results, ranked_docs, displayBatch);
+            previousButton.Show();
+            if (displayBatch == results.TotalHits / 10)
+            {
+                Next.Hide();
+            }
         }
     }
 }

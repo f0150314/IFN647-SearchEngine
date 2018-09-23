@@ -23,18 +23,11 @@ namespace SearchEngine
         Stopwatch stopwatch;
         Document[] ranked_docs;
 
-
-
         public Searching_Form()
         {
-
             InitializeComponent();
             searching = new SearchingClass();
-
             stopwatch = new Stopwatch();
-
-
-
         }
 
         private void SearchButton_Click(object sender, EventArgs e)
@@ -53,7 +46,7 @@ namespace SearchEngine
                 stopwatch.Stop();
                 string elapsed = stopwatch.Elapsed.ToString();
                 ranked_docs = searching.Get_doc(results);
-
+                searching.ClearnUpSearcher();
                 searchedResults = new SearchedResults(queryEnter.Text, elapsed, results, ranked_docs);
                 // Create new form
                 searchedResults.Show();
@@ -66,11 +59,6 @@ namespace SearchEngine
             {
                 MessageBox.Show("You need to specify your query");
             }
-        }
-
-        private void queryEnter_TextChanged(object sender, EventArgs e)
-        {
-
         }
     }
 }
