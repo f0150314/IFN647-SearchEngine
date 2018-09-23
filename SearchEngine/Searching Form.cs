@@ -60,6 +60,7 @@ namespace SearchEngine
 
                 this.Hide();
             }
+
             // Notify user if he/she did not specify topic ID
             else
             {

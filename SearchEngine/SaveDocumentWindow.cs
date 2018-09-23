@@ -17,9 +17,6 @@ namespace SearchEngine
     {
         TopDocs topDocResults;
 
-        // Create a list to store paths previously specified
-        List<string> previousPath = new List<string>();
-
         public SaveDocumentWindow(TopDocs results)
         {
             InitializeComponent();
@@ -47,8 +44,8 @@ namespace SearchEngine
                     string path = saveFileDialog.FileName;
                     string topicID = topicEnter.Text;
                     
-                    // Check whether path already exists or not
-                    if (previousPath.Contains(path))
+                    // Check whether the specified file already exists or not
+                    if (File.Exists(path))
                     {
                         // Append new results to existing file if it is true
                         using (StreamWriter stwriter = File.AppendText(path))
@@ -83,9 +80,6 @@ namespace SearchEngine
                                 stwriter.WriteLine("{0,-4} {1,-4} {2,-7} {3,-5} {4,-11} {5}", topicID, "Q0", documentID, rank, scorDoc.Score, "n9843329_n9861718_HelloWorldteam");
                             }
                         }
-
-                        // Add path into the list for next time inspection
-                        previousPath.Add(path);
                     }
                 }
                 this.Hide();
