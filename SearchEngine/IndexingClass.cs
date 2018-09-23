@@ -14,29 +14,30 @@ using Lucene.Net.Analysis.Snowball;
 
 namespace SearchEngine
 {
-    class IndexingClass
+    public class IndexingClass
     {
         System.IO.StreamReader reader;
-        Directory luceneIndexDirectory;
-        Analyzer analyzer;
+        public static Directory luceneIndexDirectory;
+        public static Analyzer analyzer = new StandardAnalyzer(VERSION);
         IndexWriter writer;
         Stopwatch stopwatch;
 
         const Lucene.Net.Util.Version VERSION = Lucene.Net.Util.Version.LUCENE_30;
-        const string DOC_ID = "DocID";
-        const string TITLE = "Title";
-        const string AUTHOR = "Author";
-        const string BIBLIO_INFO = "BiblioInfo";
-        const string ABSTRACT = "Abstract";
+        public static string FieldDOC_ID = "DocID";
+        public static string FieldTITLE = "Title";
+        public static string FieldAUTHOR = "Author";
+        public static string FieldBIBLIO_INFO = "BiblioInfo";
+        public static string FieldABSTRACT = "Abstract";
 
         public IndexingClass()
         {
             reader = null;
             luceneIndexDirectory = null;
-            analyzer = new StandardAnalyzer(VERSION);
+            //analyzer = new StandardAnalyzer(VERSION);
             writer = null;
             stopwatch = null;
         }
+
 
         // Open index and initialize analyzer and indexWriter
         public void OpenIndex(string DirectoryPath)
@@ -106,11 +107,11 @@ namespace SearchEngine
 
             // Creating Index for four different fields
             Document doc = new Document();
-            doc.Add(new Field(DOC_ID, docInfo[0], Field.Store.YES, Field.Index.NO, Field.TermVector.NO));
-            doc.Add(new Field(TITLE, docInfo[1], Field.Store.YES, Field.Index.ANALYZED, Field.TermVector.WITH_POSITIONS_OFFSETS));
-            doc.Add(new Field(AUTHOR, docInfo[2], Field.Store.YES, Field.Index.NOT_ANALYZED, Field.TermVector.WITH_POSITIONS_OFFSETS));
-            doc.Add(new Field(BIBLIO_INFO, docInfo[3], Field.Store.YES, Field.Index.NOT_ANALYZED, Field.TermVector.WITH_POSITIONS_OFFSETS));
-            doc.Add(new Field(ABSTRACT, docInfo[4], Field.Store.YES, Field.Index.ANALYZED, Field.TermVector.WITH_POSITIONS_OFFSETS));
+            doc.Add(new Field(FieldDOC_ID, docInfo[0], Field.Store.YES, Field.Index.NO, Field.TermVector.NO));
+            doc.Add(new Field(FieldTITLE, docInfo[1], Field.Store.YES, Field.Index.ANALYZED, Field.TermVector.WITH_POSITIONS_OFFSETS));
+            doc.Add(new Field(FieldAUTHOR, docInfo[2], Field.Store.YES, Field.Index.NOT_ANALYZED, Field.TermVector.WITH_POSITIONS_OFFSETS));
+            doc.Add(new Field(FieldBIBLIO_INFO, docInfo[3], Field.Store.YES, Field.Index.NOT_ANALYZED, Field.TermVector.WITH_POSITIONS_OFFSETS));
+            doc.Add(new Field(FieldABSTRACT, docInfo[4], Field.Store.YES, Field.Index.ANALYZED, Field.TermVector.WITH_POSITIONS_OFFSETS));
             writer.AddDocument(doc);
         }
 

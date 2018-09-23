@@ -103,6 +103,7 @@
     <Compile Include="Searching Form.Designer.cs">
       <DependentUpon>Searching Form.cs</DependentUpon>
     </Compile>
+    <Compile Include="SearchingClass.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
