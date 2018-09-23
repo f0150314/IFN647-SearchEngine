@@ -40,24 +40,31 @@ namespace SearchEngine
         private void SearchButton_Click(object sender, EventArgs e)
         {
             //MessageBox.Show(queryEnter.Text);
+            if (!(queryEnter.Text == ""))
+            {
+                // Cerate searcher and queryParser
+                stopwatch.Restart();
+                searching.CreateSearcher(IndexingClass.luceneIndexDirectory);
+                searching.CreateParser(IndexingClass.analyzer);
 
-            // Cerate searcher and queryParser
-            stopwatch.Restart();
-            searching.CreateSearcher(IndexingClass.luceneIndexDirectory);
-            searching.CreateParser(IndexingClass.analyzer);
+                // Search the query against the index, the default return size is set to be 30
+                // retrieve the searching result TopDocs object
+                results = searching.SearchIndex(queryEnter.Text);
+                stopwatch.Stop();
+                string elapsed = stopwatch.Elapsed.ToString();
+                ranked_docs = searching.Get_doc(results);
 
-            // Search the query against the index, the default return size is set to be 30
-            // retrieve the searching result TopDocs object
-            results = searching.SearchIndex(queryEnter.Text);
-            stopwatch.Stop();
-            string elapsed = stopwatch.Elapsed.ToString();
-            ranked_docs = searching.Get_doc(results);
+                searchedResults = new SearchedResults(queryEnter.Text, elapsed, results, ranked_docs);
+                // Create new form
+                searchedResults.Show();
 
-            searchedResults = new SearchedResults(queryEnter.Text, elapsed, results, ranked_docs);
-            // Create new form
-            searchedResults.Show();
-
-            this.Hide();
+                this.Hide();
+            }
+            // Notify user if he/she did not specify topic ID
+            else
+            {
+                MessageBox.Show("You need to specify your query");
+            }
         }
 
         private void queryEnter_TextChanged(object sender, EventArgs e)

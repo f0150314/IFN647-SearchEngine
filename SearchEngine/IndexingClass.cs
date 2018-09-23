@@ -33,7 +33,6 @@ namespace SearchEngine
         {
             reader = null;
             luceneIndexDirectory = null;
-            //analyzer = new StandardAnalyzer(VERSION);
             writer = null;
             stopwatch = null;
         }

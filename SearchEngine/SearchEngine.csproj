@@ -91,6 +91,12 @@
     <Compile Include="IndexingClass.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SaveDocumentWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SaveDocumentWindow.Designer.cs">
+      <DependentUpon>SaveDocumentWindow.cs</DependentUpon>
+    </Compile>
     <Compile Include="SearchedResults.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -116,6 +122,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="SaveDocumentWindow.resx">
+      <DependentUpon>SaveDocumentWindow.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="SearchedResults.resx">
       <DependentUpon>SearchedResults.cs</DependentUpon>
     </EmbeddedResource>
