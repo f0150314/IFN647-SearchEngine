@@ -77,13 +77,45 @@ namespace SearchEngine {
         ///.D
         ///in summarizing theoretical and experimental work on the behaviour of a
         ///typical aircraft structure in a noise environment is it possible to
-        ///develop a design procedure .
-        ///.I 219
-        ///.D [rest of string was truncated]&quot;;.
+        ///develop a design proce [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string cran_information_needs {
             get {
                 return ResourceManager.GetString("cran_information_needs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to a	hence	see
+        ///able	her	seeing
+        ///about	here	seem
+        ///above	hereafter	seemed
+        ///abroad	hereby	seeming
+        ///according	herein	seems
+        ///accordingly	here&apos;s	seen
+        ///across	hereupon	self
+        ///actually	hers	selves
+        ///adj	herself	sensible
+        ///after	he&apos;s	sent
+        ///afterwards	hi	serious
+        ///again	him	seriously
+        ///against	himself	seven
+        ///ago	his	several
+        ///ahead	hither	shall
+        ///ain&apos;t	hopefully	shan&apos;t
+        ///all	how	she
+        ///allow	howbeit	she&apos;d
+        ///allows	however	she&apos;ll
+        ///almost	hundred	she&apos;s
+        ///alone	i	should
+        ///along	i&apos;d	shouldn&apos;t
+        ///alongside	ie	since
+        ///already	if	six
+        ///also	i [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string StopwordList {
+            get {
+                return ResourceManager.GetString("StopwordList", resourceCulture);
             }
         }
     }

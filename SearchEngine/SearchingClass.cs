@@ -57,8 +57,8 @@ namespace SearchEngine
 
             queryText = queryText.ToLower();
             query = parser_abstract.Parse(queryText);
+            
             TopDocs results = searcher.Search(query, top_n);
-
             return results;
         }
 

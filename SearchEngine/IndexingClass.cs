@@ -18,6 +18,8 @@ namespace SearchEngine
     {
         System.IO.StreamReader reader;
         IndexWriter writer;
+        ISet<string> stopwords;
+
         public static Directory luceneIndexDirectory;
         public static Analyzer analyzer;
         
@@ -33,6 +35,17 @@ namespace SearchEngine
             reader = null;
             luceneIndexDirectory = null;
             writer = null;
+            stopwords = Stopwords();
+        }
+
+        // Create stopwords list
+        public ISet<string> Stopwords()
+        {
+            List<string> stopwordList = new List<string>();
+            char[] delimiters = { '\t', ' ', '\n' };
+            stopwordList = Resource.StopwordList.Split(delimiters, StringSplitOptions.RemoveEmptyEntries).ToList();
+            ISet<string> stopwordSet = new HashSet<string>(stopwordList);
+            return stopwordSet;
         }
 
         // Open index and initialize analyzer and indexWriter
@@ -40,16 +53,16 @@ namespace SearchEngine
         {
             luceneIndexDirectory = FSDirectory.Open(DirectoryPath);
             IndexWriter.MaxFieldLength mfl = new IndexWriter.MaxFieldLength(IndexWriter.DEFAULT_MAX_FIELD_LENGTH);
-
+            
             // Decide which analyzer should be used
             if (!processingState)
             {
-                analyzer = new StandardAnalyzer(VERSION);
+                analyzer = new StandardAnalyzer(VERSION, stopwords);
                 writer = new IndexWriter(luceneIndexDirectory, analyzer, true, mfl);
             }
             else
             {
-                analyzer = new SnowballAnalyzer(VERSION, "English", StopAnalyzer.ENGLISH_STOP_WORDS_SET);
+                analyzer = new SnowballAnalyzer(VERSION, "English", stopwords);
                 writer = new IndexWriter(luceneIndexDirectory, analyzer, true, mfl);
             }
         }
@@ -111,8 +124,8 @@ namespace SearchEngine
             Document doc = new Document();
             doc.Add(new Field(FieldDOC_ID, docInfo[0], Field.Store.YES, Field.Index.NO, Field.TermVector.NO));
             doc.Add(new Field(FieldTITLE, docInfo[1], Field.Store.YES, Field.Index.ANALYZED, Field.TermVector.WITH_POSITIONS_OFFSETS));
-            doc.Add(new Field(FieldAUTHOR, docInfo[2], Field.Store.YES, Field.Index.NOT_ANALYZED, Field.TermVector.WITH_POSITIONS_OFFSETS));
-            doc.Add(new Field(FieldBIBLIO_INFO, docInfo[3], Field.Store.YES, Field.Index.NOT_ANALYZED, Field.TermVector.WITH_POSITIONS_OFFSETS));
+            doc.Add(new Field(FieldAUTHOR, docInfo[2], Field.Store.YES, Field.Index.ANALYZED, Field.TermVector.WITH_POSITIONS_OFFSETS));
+            doc.Add(new Field(FieldBIBLIO_INFO, docInfo[3], Field.Store.YES, Field.Index.ANALYZED, Field.TermVector.WITH_POSITIONS_OFFSETS));
             doc.Add(new Field(FieldABSTRACT, docInfo[4], Field.Store.YES, Field.Index.ANALYZED, Field.TermVector.WITH_POSITIONS_OFFSETS));
             writer.AddDocument(doc);
         }

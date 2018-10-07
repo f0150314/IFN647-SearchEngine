@@ -111,7 +111,7 @@ namespace SearchEngine
                     searching.ClearnUpSearcher();
 
                     // Display Searching info 
-                    FinalQueryLabel.Text = "Final query: " + SearchingClass.query.ToString();
+                    FinalQueryLabel.Text = "Final query: " + SearchingClass.query.ToString().Substring(SearchingClass.query.ToString().IndexOf(':'), 3);
                     SearchingTimeLabel.Text = "Searching time: " + elapsed;
                     TotalHitsLabel.Text = "Total hits: " + results.TotalHits;
                     DisplayResult(results, ranked_docs, displayBatch = 0);
@@ -121,7 +121,6 @@ namespace SearchEngine
                     {
                         DisplayItenButton.Show();
                         SaveButton.Show();
-                        PreviousButton.Show();
                         NextButton.Show();
                     }
                     else
@@ -208,7 +207,7 @@ namespace SearchEngine
             DisplayResult(results, ranked_docs, displayBatch);
             NextButton.Show();
 
-            if (displayBatch == 0)
+            if (displayBatch <= 0)
                 PreviousButton.Hide();
         }
 
@@ -218,7 +217,7 @@ namespace SearchEngine
             DisplayResult(results, ranked_docs, displayBatch);
             PreviousButton.Show();
 
-            if (displayBatch == results.TotalHits / 10)
+            if (displayBatch >= results.TotalHits / 10)
                 NextButton.Hide();
         }
 
@@ -277,9 +276,10 @@ namespace SearchEngine
                     // Print out the results across each information needs
                     foreach (var infoNeed in infoNeeds)
                     {
+                        int rank = 0; 
                         searching = new SearchingClass();
                         TopDocs infoResults = searching.SearchIndex(IndexingClass.luceneIndexDirectory, IndexingClass.analyzer, infoNeed);
-                        Console.WriteLine(SearchingClass.query);
+
                         searching.ClearnUpSearcher();
 
                         if (File.Exists(path))
@@ -288,14 +288,17 @@ namespace SearchEngine
                             {
                                 foreach (ScoreDoc scorDoc in infoResults.ScoreDocs)
                                 {
+                                    rank++;
                                     // Use searcher to acquire doucment ID
                                     using (IndexSearcher searcher = new IndexSearcher(IndexingClass.luceneIndexDirectory))
                                     {
                                         documentID = searcher.Doc(scorDoc.Doc).Get(IndexingClass.FieldDOC_ID).ToString();
+                                        char[] delimeter = { '\n' };
+                                        documentID = documentID.Split(delimeter)[0];
                                     }
 
                                     // Write to the file
-                                    stwriter.WriteLine("{0} {1} {2,-5} {3}", infoID[index], 0, documentID, 1);
+                                    stwriter.WriteLine("{0,-4} {1,-4} {2,-7} {3,-5} {4,-11} {5}", infoID[index].Substring(0, 3), "Q0", documentID, rank, scorDoc.Score, "n9843329_n9861718_HelloWorldteam");
                                 }
                             }
                         }
@@ -305,11 +308,14 @@ namespace SearchEngine
                             {
                                 foreach (ScoreDoc scorDoc in infoResults.ScoreDocs)
                                 {
+                                    rank++;
                                     using (IndexSearcher searcher = new IndexSearcher(IndexingClass.luceneIndexDirectory))
                                     {
                                         documentID = searcher.Doc(scorDoc.Doc).Get(IndexingClass.FieldDOC_ID).ToString();
+                                        char[] delimeter = { '\n' };
+                                        documentID = documentID.Split(delimeter)[0];
                                     }
-                                    stwriter.WriteLine("{0} {1} {2,-5} {3}", infoID[index], 0, documentID, 1);
+                                    stwriter.WriteLine("{0,-4} {1,-4} {2,-7} {3,-5} {4,-11} {5}", infoID[index].Substring(0, 3), "Q0", documentID, rank, scorDoc.Score, "n9843329_n9861718_HelloWorldteam");
                                 }
                             }
                         }

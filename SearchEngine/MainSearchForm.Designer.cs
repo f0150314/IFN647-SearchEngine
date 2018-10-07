@@ -60,7 +60,7 @@
             // FinalQueryLabel
             // 
             this.FinalQueryLabel.AutoSize = true;
-            this.FinalQueryLabel.Location = new System.Drawing.Point(245, 67);
+            this.FinalQueryLabel.Location = new System.Drawing.Point(18, 67);
             this.FinalQueryLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.FinalQueryLabel.Name = "FinalQueryLabel";
             this.FinalQueryLabel.Size = new System.Drawing.Size(58, 13);
@@ -70,7 +70,7 @@
             // SearchingTimeLabel
             // 
             this.SearchingTimeLabel.AutoSize = true;
-            this.SearchingTimeLabel.Location = new System.Drawing.Point(245, 94);
+            this.SearchingTimeLabel.Location = new System.Drawing.Point(18, 94);
             this.SearchingTimeLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.SearchingTimeLabel.Name = "SearchingTimeLabel";
             this.SearchingTimeLabel.Size = new System.Drawing.Size(80, 13);
@@ -80,7 +80,7 @@
             // TotalHitsLabel
             // 
             this.TotalHitsLabel.AutoSize = true;
-            this.TotalHitsLabel.Location = new System.Drawing.Point(245, 122);
+            this.TotalHitsLabel.Location = new System.Drawing.Point(18, 122);
             this.TotalHitsLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.TotalHitsLabel.Name = "TotalHitsLabel";
             this.TotalHitsLabel.Size = new System.Drawing.Size(50, 13);
@@ -257,7 +257,7 @@
             // 
             // AutoParsing
             // 
-            this.AutoParsing.Location = new System.Drawing.Point(21, 117);
+            this.AutoParsing.Location = new System.Drawing.Point(360, 112);
             this.AutoParsing.Name = "AutoParsing";
             this.AutoParsing.Size = new System.Drawing.Size(138, 23);
             this.AutoParsing.TabIndex = 14;
@@ -268,7 +268,7 @@
             // PhraseFormCheckbox
             // 
             this.PhraseFormCheckbox.AutoSize = true;
-            this.PhraseFormCheckbox.Location = new System.Drawing.Point(21, 63);
+            this.PhraseFormCheckbox.Location = new System.Drawing.Point(413, 62);
             this.PhraseFormCheckbox.Name = "PhraseFormCheckbox";
             this.PhraseFormCheckbox.Size = new System.Drawing.Size(85, 17);
             this.PhraseFormCheckbox.TabIndex = 14;

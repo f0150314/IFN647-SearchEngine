@@ -148,7 +148,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Information_needs\cran_information_needs.txt" />
+    <None Include="Resources\cran_information_needs.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\StopwordList.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
