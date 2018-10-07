@@ -111,7 +111,7 @@ namespace SearchEngine
                     searching.ClearnUpSearcher();
 
                     // Display Searching info 
-                    FinalQueryLabel.Text = "Final query: " + SearchingClass.query.ToString().Substring(SearchingClass.query.ToString().IndexOf(':'), 3);
+                    FinalQueryLabel.Text = "Final query: " + SearchingClass.query.ToString();
                     SearchingTimeLabel.Text = "Searching time: " + elapsed;
                     TotalHitsLabel.Text = "Total hits: " + results.TotalHits;
                     DisplayResult(results, ranked_docs, displayBatch = 0);
@@ -164,7 +164,7 @@ namespace SearchEngine
                                           docs[i].Get(IndexingClass.FieldTITLE).ToString(),
                                           docs[i].Get(IndexingClass.FieldAUTHOR).ToString(),
                                           docs[i].Get(IndexingClass.FieldBIBLIO_INFO).ToString(),
-                                          docs[i].Get(IndexingClass.FieldABSTRACT).ToString().Split(new[] { '\r', '\n' }).FirstOrDefault()});
+                                          docs[i].Get(IndexingClass.FieldABSTRACT).ToString().Split(new[] { " ." }, StringSplitOptions.RemoveEmptyEntries).FirstOrDefault()});
                     SearchedResultView.DataSource = dt;
                     //ScoreDoc scoreDoc = results.ScoreDocs[i];
                     //Lucene.Net.Documents.Document doc =
@@ -188,7 +188,8 @@ namespace SearchEngine
                                           docs[i].Get(IndexingClass.FieldTITLE).ToString(),
                                           docs[i].Get(IndexingClass.FieldAUTHOR).ToString(),
                                           docs[i].Get(IndexingClass.FieldBIBLIO_INFO).ToString(),
-                                          docs[i].Get(IndexingClass.FieldABSTRACT).ToString().Split(new[] { '\r', '\n' }).FirstOrDefault()});
+                                          docs[i].Get(IndexingClass.FieldABSTRACT).ToString().Split(new[] { " ." }, StringSplitOptions.RemoveEmptyEntries).FirstOrDefault()});
+                                          //docs[i].Get(IndexingClass.FieldABSTRACT).ToString().Split(new[] { '\r', '\n' }).FirstOrDefault()});
                     SearchedResultView.DataSource = dt;
                     //ScoreDoc scoreDoc = results.ScoreDocs[i];
                     //Lucene.Net.Documents.Document doc =

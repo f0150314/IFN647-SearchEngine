@@ -269,7 +269,7 @@
             // PhraseFormCheckbox
             // 
             this.PhraseFormCheckbox.AutoSize = true;
-            this.PhraseFormCheckbox.Location = new System.Drawing.Point(413, 62);
+            this.PhraseFormCheckbox.Location = new System.Drawing.Point(413, 67);
             this.PhraseFormCheckbox.Name = "PhraseFormCheckbox";
             this.PhraseFormCheckbox.Size = new System.Drawing.Size(85, 17);
             this.PhraseFormCheckbox.TabIndex = 14;

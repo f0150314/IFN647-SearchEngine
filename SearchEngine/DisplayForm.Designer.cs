@@ -38,7 +38,7 @@
             // CloseButton
             // 
             this.CloseButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.CloseButton.Location = new System.Drawing.Point(523, 579);
+            this.CloseButton.Location = new System.Drawing.Point(445, 255);
             this.CloseButton.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.CloseButton.Name = "CloseButton";
             this.CloseButton.Size = new System.Drawing.Size(72, 29);
@@ -87,17 +87,19 @@
             this.TitleLabel.TabIndex = 8;
             this.TitleLabel.Text = "TitleLabel";
             // 
-            // DisplayAbstract
+            // DisplayForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(633, 630);
+            this.AutoSize = true;
+            this.ClientSize = new System.Drawing.Size(546, 306);
             this.Controls.Add(this.AbstractLabel);
             this.Controls.Add(this.TitleLabel);
             this.Controls.Add(this.BibliographyLabel);
             this.Controls.Add(this.AuthorLabel);
             this.Controls.Add(this.CloseButton);
-            this.Name = "DisplayAbstract";
+            this.Name = "DisplayForm";
+            this.Padding = new System.Windows.Forms.Padding(0, 0, 0, 60);
             this.Text = "DisplayAbstract";
             this.ResumeLayout(false);
             this.PerformLayout();
