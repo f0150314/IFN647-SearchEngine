@@ -110,8 +110,9 @@ namespace SearchEngine
                     ranked_docs = searching.Get_doc(results);
                     searching.ClearnUpSearcher();
 
+                    
                     // Display Searching info 
-                    FinalQueryLabel.Text = "Final query: " + SearchingClass.query.ToString();
+                    FinalQueryLabel.Text = "Final query: " + SearchingClass.finalQuery;
                     SearchingTimeLabel.Text = "Searching time: " + elapsed;
                     TotalHitsLabel.Text = "Total hits: " + results.TotalHits;
                     DisplayResult(results, ranked_docs, displayBatch = 0);

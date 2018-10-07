@@ -26,8 +26,7 @@ namespace SearchEngine
         QueryParser parser_bib;
         QueryParser parser_abstract;
         MultiFieldQueryParser multi_field_query_parser;
-
-        public static Query query;
+        public static string finalQuery;
 
         // Initialize constant variables
         const Lucene.Net.Util.Version VERSION = Lucene.Net.Util.Version.LUCENE_30;
@@ -59,12 +58,36 @@ namespace SearchEngine
             parser_bib = new QueryParser(VERSION, IndexingClass.FieldBIBLIO_INFO, searchAnalyzer);
             parser_abstract = new QueryParser(VERSION, IndexingClass.FieldABSTRACT, searchAnalyzer);
 
+            string query_test = multi_field_query_parser.Field;
+            Console.WriteLine(query_test);
             queryText = queryText.ToLower();
-            query = multi_field_query_parser.Parse(queryText);
-            
+            Query query = multi_field_query_parser.Parse(queryText);           
             TopDocs results = searcher.Search(query, top_n);
+            finalQuery = CreateFinalQuery(query);
             return results;
         }
+
+        // Create final query for display
+        public string CreateFinalQuery(Query query)
+        {
+            finalQuery = null;
+            ISet<Term> termSet = new HashSet<Term>();
+            query.ExtractTerms(termSet);
+            Term[] termArray = termSet.ToArray();
+            List<string> queryTokenList = new List<string>();
+            foreach (var value in termArray)
+            {
+                //Console.WriteLine(value.ToString());
+                string queryToken = value.ToString().Split(new[] { ':' })[1];
+                if (!queryTokenList.Contains(queryToken))
+                    queryTokenList.Add(queryToken);
+            }
+            foreach (var queryToken in queryTokenList)
+                finalQuery += queryToken + " ";
+
+            return finalQuery;
+        }
+
 
         // The method that dispose the searcher
         public void ClearnUpSearcher()
