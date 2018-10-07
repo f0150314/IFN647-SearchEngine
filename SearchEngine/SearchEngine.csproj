@@ -71,6 +71,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.Windows.Forms.DataVisualization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -82,46 +83,36 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DisplayAbstract.cs">
+    <Compile Include="DisplayForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="DisplayAbstract.Designer.cs">
-      <DependentUpon>DisplayAbstract.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Form1.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="DisplayForm.Designer.cs">
+      <DependentUpon>DisplayForm.cs</DependentUpon>
     </Compile>
     <Compile Include="IndexingClass.cs" />
     <Compile Include="NewSimilarity.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SaveDocumentWindow.cs">
+    <Compile Include="Resource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resource.resx</DependentUpon>
+    </Compile>
+    <Compile Include="SaveResultsForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SaveDocumentWindow.Designer.cs">
-      <DependentUpon>SaveDocumentWindow.cs</DependentUpon>
+    <Compile Include="SaveResultsForm.Designer.cs">
+      <DependentUpon>SaveResultsForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="SearchedResults.cs">
+    <Compile Include="MainSearchForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SearchedResults.Designer.cs">
-      <DependentUpon>SearchedResults.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Searching Form.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Searching Form.Designer.cs">
-      <DependentUpon>Searching Form.cs</DependentUpon>
+    <Compile Include="MainSearchForm.Designer.cs">
+      <DependentUpon>MainSearchForm.cs</DependentUpon>
     </Compile>
     <Compile Include="SearchingClass.cs" />
-    <EmbeddedResource Include="DisplayAbstract.resx">
-      <DependentUpon>DisplayAbstract.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <EmbeddedResource Include="DisplayForm.resx">
+      <DependentUpon>DisplayForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -132,14 +123,15 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="SaveDocumentWindow.resx">
-      <DependentUpon>SaveDocumentWindow.cs</DependentUpon>
+    <EmbeddedResource Include="Resource.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resource.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="SearchedResults.resx">
-      <DependentUpon>SearchedResults.cs</DependentUpon>
+    <EmbeddedResource Include="SaveResultsForm.resx">
+      <DependentUpon>SaveResultsForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Searching Form.resx">
-      <DependentUpon>Searching Form.cs</DependentUpon>
+    <EmbeddedResource Include="MainSearchForm.resx">
+      <DependentUpon>MainSearchForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -154,6 +146,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Information_needs\cran_information_needs.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

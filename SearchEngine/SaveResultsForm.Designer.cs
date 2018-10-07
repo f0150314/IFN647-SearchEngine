@@ -1,6 +1,6 @@
 ﻿namespace SearchEngine
 {
-    partial class SaveDocumentWindow
+    partial class SaveResultsForm
     {
         /// <summary>
         /// Required designer variable.

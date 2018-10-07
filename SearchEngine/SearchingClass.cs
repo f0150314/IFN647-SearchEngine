@@ -26,36 +26,16 @@ namespace SearchEngine
         QueryParser parser_bib;
         QueryParser parser_abstract;
 
+        public static Query query;
+
+        // Initialize constant variables
+        const Lucene.Net.Util.Version VERSION = Lucene.Net.Util.Version.LUCENE_30;
+        
         public SearchingClass()
         {
 
         }
 
-        // Initialize constant variables
-        const Lucene.Net.Util.Version VERSION = Lucene.Net.Util.Version.LUCENE_30;
-
-
-        // The method that instantiates searcher
-        public void CreateSearcher(Directory luceneIndexDirectory)
-        {
-            searcher = new IndexSearcher(luceneIndexDirectory);
-        }
-
-        // The method that instantiates query parser
-        public void CreateParser(Analyzer searchAnalyzer)
-        {
-            parser_docid = new QueryParser(VERSION, IndexingClass.FieldDOC_ID, searchAnalyzer);
-            parser_title = new QueryParser(VERSION, IndexingClass.FieldTITLE, searchAnalyzer);
-            parser_author = new QueryParser(VERSION, IndexingClass.FieldAUTHOR, searchAnalyzer);
-            parser_bib = new QueryParser(VERSION, IndexingClass.FieldBIBLIO_INFO, searchAnalyzer);
-            parser_abstract = new QueryParser(VERSION, IndexingClass.FieldABSTRACT, searchAnalyzer);
-        }
-
-        // The method that dispose the searcher
-        public void ClearnUpSearcher()
-        {
-            searcher.Dispose();
-        }
 
         // The method that searches the given searching query against the index and showing the number of total hits
 
@@ -63,13 +43,29 @@ namespace SearchEngine
         // Chen whether it is necessary to include the function of searching against title, author etc...
         // *************************************************************************************    
         // return: TopDocs object
-        public TopDocs SearchIndex(string queryText, int top_n = 500)
+        public TopDocs SearchIndex(Directory luceneIndexDirectory, Analyzer searchAnalyzer, string queryText, int top_n = 500)
         {
+            // Initialize Searcher
+            searcher = new IndexSearcher(luceneIndexDirectory);
+
+            // Initialize QueryParser
+            parser_docid = new QueryParser(VERSION, IndexingClass.FieldDOC_ID, searchAnalyzer);
+            parser_title = new QueryParser(VERSION, IndexingClass.FieldTITLE, searchAnalyzer);
+            parser_author = new QueryParser(VERSION, IndexingClass.FieldAUTHOR, searchAnalyzer);
+            parser_bib = new QueryParser(VERSION, IndexingClass.FieldBIBLIO_INFO, searchAnalyzer);
+            parser_abstract = new QueryParser(VERSION, IndexingClass.FieldABSTRACT, searchAnalyzer);
+
             queryText = queryText.ToLower();
-            Query query = parser_abstract.Parse(queryText);
+            query = parser_abstract.Parse(queryText);
             TopDocs results = searcher.Search(query, top_n);
 
             return results;
+        }
+
+        // The method that dispose the searcher
+        public void ClearnUpSearcher()
+        {
+            searcher.Dispose();
         }
 
         // The method that display the result ordered by its ranking

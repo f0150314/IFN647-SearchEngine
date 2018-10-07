@@ -13,11 +13,11 @@ using Lucene.Net.Documents;
 
 namespace SearchEngine
 {
-    public partial class SaveDocumentWindow : Form
+    public partial class SaveResultsForm : Form
     {
         TopDocs topDocResults;
 
-        public SaveDocumentWindow(TopDocs results)
+        public SaveResultsForm(TopDocs results)
         {
             InitializeComponent();
             topDocResults = results;
@@ -87,9 +87,7 @@ namespace SearchEngine
 
             // Notify user if he/she did not specify topic ID
             else
-            {
                 MessageBox.Show("Please specify topic ID");
-            }
         }
     }
 }
