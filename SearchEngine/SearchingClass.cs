@@ -25,6 +25,7 @@ namespace SearchEngine
         QueryParser parser_author;
         QueryParser parser_bib;
         QueryParser parser_abstract;
+        MultiFieldQueryParser multi_field_query_parser;
 
         public static Query query;
 
@@ -48,6 +49,9 @@ namespace SearchEngine
             // Initialize Searcher
             searcher = new IndexSearcher(luceneIndexDirectory);
 
+            // Initialize multiple field query parser
+            multi_field_query_parser = new MultiFieldQueryParser(VERSION, new string [] { IndexingClass.FieldDOC_ID, IndexingClass.FieldTITLE, IndexingClass.FieldAUTHOR, IndexingClass.FieldBIBLIO_INFO, IndexingClass.FieldABSTRACT}, searchAnalyzer); 
+
             // Initialize QueryParser
             parser_docid = new QueryParser(VERSION, IndexingClass.FieldDOC_ID, searchAnalyzer);
             parser_title = new QueryParser(VERSION, IndexingClass.FieldTITLE, searchAnalyzer);
@@ -56,7 +60,7 @@ namespace SearchEngine
             parser_abstract = new QueryParser(VERSION, IndexingClass.FieldABSTRACT, searchAnalyzer);
 
             queryText = queryText.ToLower();
-            query = parser_abstract.Parse(queryText);
+            query = multi_field_query_parser.Parse(queryText);
             
             TopDocs results = searcher.Search(query, top_n);
             return results;

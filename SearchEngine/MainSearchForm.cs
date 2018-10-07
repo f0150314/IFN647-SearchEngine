@@ -326,5 +326,10 @@ namespace SearchEngine
             else
                 MessageBox.Show("You need to do indexing before seaching");
         }
+
+        private void SearchingBox_Enter(object sender, EventArgs e)
+        {
+
+        }
     }
 }

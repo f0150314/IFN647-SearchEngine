@@ -254,6 +254,7 @@
             this.SearchingBox.TabIndex = 13;
             this.SearchingBox.TabStop = false;
             this.SearchingBox.Text = "Searching";
+            this.SearchingBox.Enter += new System.EventHandler(this.SearchingBox_Enter);
             // 
             // AutoParsing
             // 
