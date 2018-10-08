@@ -64,7 +64,7 @@
             // BibliographyContent
             // 
             this.BibliographyContent.AutoSize = true;
-            this.BibliographyContent.Location = new System.Drawing.Point(22, 154);
+            this.BibliographyContent.Location = new System.Drawing.Point(22, 141);
             this.BibliographyContent.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.BibliographyContent.Name = "BibliographyContent";
             this.BibliographyContent.Size = new System.Drawing.Size(101, 13);
@@ -74,7 +74,7 @@
             // AuthorContent
             // 
             this.AuthorContent.AutoSize = true;
-            this.AuthorContent.Location = new System.Drawing.Point(22, 96);
+            this.AuthorContent.Location = new System.Drawing.Point(22, 81);
             this.AuthorContent.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.AuthorContent.Name = "AuthorContent";
             this.AuthorContent.Size = new System.Drawing.Size(75, 13);
@@ -84,7 +84,7 @@
             // TitleContent
             // 
             this.TitleContent.AutoSize = true;
-            this.TitleContent.Location = new System.Drawing.Point(22, 40);
+            this.TitleContent.Location = new System.Drawing.Point(22, 25);
             this.TitleContent.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.TitleContent.Name = "TitleContent";
             this.TitleContent.Size = new System.Drawing.Size(64, 13);
@@ -117,7 +117,7 @@
             // 
             this.BibliographyLabel.AutoSize = true;
             this.BibliographyLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.BibliographyLabel.Location = new System.Drawing.Point(22, 133);
+            this.BibliographyLabel.Location = new System.Drawing.Point(22, 135);
             this.BibliographyLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.BibliographyLabel.Name = "BibliographyLabel";
             this.BibliographyLabel.Size = new System.Drawing.Size(113, 17);

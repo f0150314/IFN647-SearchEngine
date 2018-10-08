@@ -16,12 +16,12 @@ namespace SearchEngine
         public DisplayForm(int ind, Document[] docs)
         {
             InitializeComponent();
-            TitleContent.Text = docs[ind].Get(IndexingClass.FieldTITLE).ToString().Substring(2);
+            TitleContent.Text = docs[ind].Get(IndexingClass.FieldTITLE).ToString();
 
             // The abstract needs to be full abstract
-            AuthorContent.Text = docs[ind].Get(IndexingClass.FieldAUTHOR).ToString().Substring(2);
+            AuthorContent.Text = docs[ind].Get(IndexingClass.FieldAUTHOR).ToString();
 
-            BibliographyContent.Text = docs[ind].Get(IndexingClass.FieldBIBLIO_INFO).ToString().Substring(2);
+            BibliographyContent.Text = docs[ind].Get(IndexingClass.FieldBIBLIO_INFO).ToString();
 
             AbstractContent.Text = docs[ind].Get(IndexingClass.FieldABSTRACT).ToString();
         }
