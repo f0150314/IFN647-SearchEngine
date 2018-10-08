@@ -67,7 +67,7 @@ namespace SearchEngine
             return results;
         }
 
-        // Create final query for display
+        // Create final query for display * still need to improve
         public string CreateFinalQuery(Query query)
         {
             finalQuery = null;
@@ -83,7 +83,9 @@ namespace SearchEngine
                     queryTokenList.Add(queryToken);
             }
             foreach (var queryToken in queryTokenList)
-                finalQuery += queryToken + " ";
+            {
+                finalQuery += queryToken + ", ";
+            }
 
             return finalQuery;
         }

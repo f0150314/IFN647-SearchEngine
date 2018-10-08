@@ -53,13 +53,11 @@ namespace SearchEngine
                             foreach (ScoreDoc scorDoc in topDocResults.ScoreDocs)
                             {
                                 rank++;
-
                                 // Use searcher to acquire doucment ID
                                 using (IndexSearcher searcher = new IndexSearcher(IndexingClass.luceneIndexDirectory))
                                 {
                                     documentID = searcher.Doc(scorDoc.Doc).Get(IndexingClass.FieldDOC_ID).ToString();
-                                    char[] delimeter = { '\n' };
-                                    documentID = documentID.Split(delimeter)[0];
+                                    documentID = documentID.Split(new[] { '\n' })[0];
                                 }
 
                                 // Write to the file
@@ -78,8 +76,7 @@ namespace SearchEngine
                                 using (IndexSearcher searcher = new IndexSearcher(IndexingClass.luceneIndexDirectory))
                                 {
                                     documentID = searcher.Doc(scorDoc.Doc).Get(IndexingClass.FieldDOC_ID).ToString();
-                                    char[] delimeter = { '\n' };
-                                    documentID = documentID.Split(delimeter)[0];
+                                    documentID = documentID.Split(new[] { '\n' })[0];
                                 }
                                 stwriter.WriteLine("{0,-4} {1,-4} {2,-7} {3,-5} {4,-11} {5}", topicID, "Q0", documentID, rank, scorDoc.Score, "n9843329_n9861718_HelloWorldteam");
                             }

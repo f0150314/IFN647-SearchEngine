@@ -121,12 +121,24 @@ namespace SearchEngine
             docInfo[4] = docInfo[4].Remove(0, docInfo[1].Length);
 
             // Creating Index for four different fields
+            Field doc_ID = new Field(FieldDOC_ID, docInfo[0], Field.Store.YES, Field.Index.NO, Field.TermVector.NO);
+            Field title = new Field(FieldTITLE, docInfo[1], Field.Store.YES, Field.Index.ANALYZED, Field.TermVector.WITH_POSITIONS_OFFSETS);
+            Field author = new Field(FieldAUTHOR, docInfo[2], Field.Store.YES, Field.Index.ANALYZED, Field.TermVector.WITH_POSITIONS_OFFSETS);
+            Field bibliography = new Field(FieldBIBLIO_INFO, docInfo[3], Field.Store.YES, Field.Index.ANALYZED, Field.TermVector.WITH_POSITIONS_OFFSETS);
+            Field abstrat = new Field(FieldABSTRACT, docInfo[4], Field.Store.YES, Field.Index.ANALYZED, Field.TermVector.WITH_POSITIONS_OFFSETS);
+
+            // Default boosting value = 1, boosting level changes when user specify the value 
+            title.Boost = MainSearchForm.titleBoost;
+            author.Boost = MainSearchForm.authorBoost;
+            bibliography.Boost = MainSearchForm.bibliBoost;
+            abstrat.Boost = MainSearchForm.abstractBoost;
+
             Document doc = new Document();
-            doc.Add(new Field(FieldDOC_ID, docInfo[0], Field.Store.YES, Field.Index.NO, Field.TermVector.NO));
-            doc.Add(new Field(FieldTITLE, docInfo[1], Field.Store.YES, Field.Index.ANALYZED, Field.TermVector.WITH_POSITIONS_OFFSETS));
-            doc.Add(new Field(FieldAUTHOR, docInfo[2], Field.Store.YES, Field.Index.ANALYZED, Field.TermVector.WITH_POSITIONS_OFFSETS));
-            doc.Add(new Field(FieldBIBLIO_INFO, docInfo[3], Field.Store.YES, Field.Index.ANALYZED, Field.TermVector.WITH_POSITIONS_OFFSETS));
-            doc.Add(new Field(FieldABSTRACT, docInfo[4], Field.Store.YES, Field.Index.ANALYZED, Field.TermVector.WITH_POSITIONS_OFFSETS));
+            doc.Add(doc_ID);
+            doc.Add(title);
+            doc.Add(author);
+            doc.Add(bibliography);
+            doc.Add(abstrat);
             writer.AddDocument(doc);
         }
 

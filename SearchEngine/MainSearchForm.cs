@@ -22,17 +22,28 @@ namespace SearchEngine
         Stopwatch stopwatch;
 
         bool indexingState = false;
-        bool checkState = false;
-        bool phrase = false;
         int selectedItem;
         int displayBatch;
         string inputQuery = null;
         public static Document[] ranked_docs;
         public static TopDocs results;
+        public static float titleBoost = 1;
+        public static float authorBoost = 1;
+        public static float bibliBoost = 1;
+        public static float abstractBoost = 1;
+
 
         public MainSearchForm()
         {           
             InitializeComponent();
+            TitleBoostBox.Enabled = false;
+            AuthorBoostBox.Enabled = false;
+            BibliBoostBox.Enabled = false;
+            AbstractBoostBox.Enabled = false;
+            TitleBoostBox.Text = "1.0";
+            AuthorBoostBox.Text = "1.0";
+            BibliBoostBox.Text = "1.0";
+            AbstractBoostBox.Text = "1.0";
             PreviousButton.Hide();
             NextButton.Hide();
             SaveButton.Hide();
@@ -55,21 +66,22 @@ namespace SearchEngine
             }
         }
 
-        private void PreprocessCheckBox_CheckedChanged(object sender, EventArgs e)
-        {
-            if (PreprocessCheckBox.Checked)
-                checkState = true;
-            else
-                checkState = false;
-        }
-
         private void SubmitButton_Click(object sender, EventArgs e)
         {
+            if (TitleBoostCheckBox.Checked)
+                titleBoost = float.Parse(TitleBoostBox.Text);
+            if (AuthorBoostCheckBox.Checked)
+                authorBoost = float.Parse(AuthorBoostBox.Text);
+            if (BibliBoostCheckBox.Checked)
+                bibliBoost = float.Parse(BibliBoostBox.Text);
+            if (AbstractBoostCheckBox.Checked)
+                abstractBoost = float.Parse(AbstractBoostBox.Text);
+
             stopwatch = new Stopwatch();
             indexing = new IndexingClass();
 
             stopwatch.Restart();
-            indexing.OpenIndex(DirectoryPathLabel.Text, checkState);
+            indexing.OpenIndex(DirectoryPathLabel.Text, StemmingCheckBox.Checked);
             indexing.WalkDirectoryTree(SourceCollectionPathLabel.Text);
             stopwatch.Stop();
 
@@ -79,22 +91,13 @@ namespace SearchEngine
             indexingState = true;
         }
 
-        //Something wrong with this part...when i click the check box, it never execute the if statement...
-        private void PhraseFormCheckbox_CheckedChanged(object sender, EventArgs e)
-        {
-            if (PhraseFormCheckbox.Checked)
-                phrase = true;
-            else
-                phrase = false;
-        }
-
         private void SearchButton_Click(object sender, EventArgs e)
         {
             if (indexingState == true)
             {
                 if (!(QueryEnter.Text == ""))
                 {                 
-                    if (phrase)
+                    if (PhraseFormCheckbox.Checked)
                         inputQuery = "\"" + QueryEnter.Text + "\"";
                     else
                         inputQuery = QueryEnter.Text;
@@ -171,10 +174,10 @@ namespace SearchEngine
                     //Lucene.Net.Documents.Document doc =
                     //item_title = new ListViewItem(results);
                 }
-                SearchedResultView.Columns[0].Width = 30;
-                SearchedResultView.Columns[1].Width = 150;
-                SearchedResultView.Columns[2].Width = 100;
-                SearchedResultView.Columns[3].Width = 100;
+                //SearchedResultView.Columns[0].Width = 30;
+                //SearchedResultView.Columns[1].Width = 150;
+                //SearchedResultView.Columns[2].Width = 100;
+                //SearchedResultView.Columns[3].Width = 100;
             }
 
             if (displayBatch == results.TotalHits / 10)
@@ -200,10 +203,10 @@ namespace SearchEngine
                     //Lucene.Net.Documents.Document doc =
                     //item_title = new ListViewItem(results);
                 }
-                SearchedResultView.Columns[0].Width = 30;
-                SearchedResultView.Columns[1].Width = 150;
-                SearchedResultView.Columns[2].Width = 100;
-                SearchedResultView.Columns[3].Width = 100;
+                //SearchedResultView.Columns[0].Width = 30;
+                //SearchedResultView.Columns[1].Width = 150;
+                //SearchedResultView.Columns[2].Width = 100;
+                //SearchedResultView.Columns[3].Width = 100;
             }
 
             // Show empty info when 0 result is found
@@ -263,13 +266,12 @@ namespace SearchEngine
             {
                 if (saveInfoDialog.ShowDialog() == DialogResult.OK)
                 {
-                    string documentID = null;
                     int index = 0;
+                    string documentID = null;                
 
                     // Get speficied file path and topic ID
                     string path = saveInfoDialog.FileName;
 
-                    //MessageBox.Show(Resource.cran_information_needs); 
                     List<string> infoID = new List<string>();
                     List<string> infoNeeds = new List<string>();
 
@@ -291,9 +293,10 @@ namespace SearchEngine
                         TopDocs infoResults = searching.SearchIndex(IndexingClass.luceneIndexDirectory, IndexingClass.analyzer, infoNeed);
 
                         searching.ClearnUpSearcher();
-
+                        // Check whether the specified file already exists or not
                         if (File.Exists(path))
                         {
+                            // Append new results to existing file if it is true
                             using (StreamWriter stwriter = File.AppendText(path))
                             {
                                 foreach (ScoreDoc scorDoc in infoResults.ScoreDocs)
@@ -303,8 +306,7 @@ namespace SearchEngine
                                     using (IndexSearcher searcher = new IndexSearcher(IndexingClass.luceneIndexDirectory))
                                     {
                                         documentID = searcher.Doc(scorDoc.Doc).Get(IndexingClass.FieldDOC_ID).ToString();
-                                        char[] delimeter = { '\n' };
-                                        documentID = documentID.Split(delimeter)[0];
+                                        documentID = documentID.Split(new[] { '\n' })[0];
                                     }
 
                                     // Write to the file
@@ -322,8 +324,7 @@ namespace SearchEngine
                                     using (IndexSearcher searcher = new IndexSearcher(IndexingClass.luceneIndexDirectory))
                                     {
                                         documentID = searcher.Doc(scorDoc.Doc).Get(IndexingClass.FieldDOC_ID).ToString();
-                                        char[] delimeter = { '\n' };
-                                        documentID = documentID.Split(delimeter)[0];
+                                        documentID = documentID.Split(new[] { '\n' })[0];
                                     }
                                     stwriter.WriteLine("{0,-4} {1,-4} {2,-7} {3,-5} {4,-11} {5}", infoID[index].Substring(0, 3), "Q0", documentID, rank, scorDoc.Score, "n9843329_n9861718_HelloWorldteam");
                                 }
@@ -337,9 +338,56 @@ namespace SearchEngine
                 MessageBox.Show("You need to do indexing before seaching");
         }
 
-        private void SearchingBox_Enter(object sender, EventArgs e)
+        private void TitleBoostCheckBox_CheckedChanged(object sender, EventArgs e)
         {
+            if (TitleBoostCheckBox.Checked)
+            {
+                TitleBoostBox.Enabled = true;
+            }
+            else
+            {
+                TitleBoostBox.Enabled = false;
+                titleBoost = 1;
+            }
+        }
 
+        private void AuthorBoostCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (AuthorBoostCheckBox.Checked)
+            {
+                AuthorBoostBox.Enabled = true; 
+            }
+            else
+            {
+                AuthorBoostBox.Enabled = false;
+                authorBoost = 1;
+            }
+        }
+
+        private void BibliBoostCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (BibliBoostCheckBox.Checked)
+            {
+                BibliBoostBox.Enabled = true;
+            }
+            else
+            {
+                BibliBoostBox.Enabled = false;
+                bibliBoost = 1;
+            }
+        }
+
+        private void AbstractBoostCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (AbstractBoostCheckBox.Checked)
+            {
+                AbstractBoostBox.Enabled = true;
+            }
+            else
+            {
+                AbstractBoostBox.Enabled = false;
+                abstractBoost = 1;
+            }
         }
     }
 }

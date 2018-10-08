@@ -29,10 +29,14 @@
         private void InitializeComponent()
         {
             this.CloseButton = new System.Windows.Forms.Button();
-            this.AbstractLabel = new System.Windows.Forms.Label();
-            this.BibliographyLabel = new System.Windows.Forms.Label();
-            this.AuthorLabel = new System.Windows.Forms.Label();
+            this.AbstractContent = new System.Windows.Forms.Label();
+            this.BibliographyContent = new System.Windows.Forms.Label();
+            this.AuthorContent = new System.Windows.Forms.Label();
+            this.TitleContent = new System.Windows.Forms.Label();
             this.TitleLabel = new System.Windows.Forms.Label();
+            this.AuthorLabel = new System.Windows.Forms.Label();
+            this.BibliographyLabel = new System.Windows.Forms.Label();
+            this.AbstractLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // CloseButton
@@ -47,45 +51,89 @@
             this.CloseButton.UseVisualStyleBackColor = true;
             this.CloseButton.Click += new System.EventHandler(this.CloseButton_Click);
             // 
-            // AbstractLabel
+            // AbstractContent
             // 
-            this.AbstractLabel.AutoSize = true;
-            this.AbstractLabel.Location = new System.Drawing.Point(28, 195);
-            this.AbstractLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.AbstractLabel.Name = "AbstractLabel";
-            this.AbstractLabel.Size = new System.Drawing.Size(72, 13);
-            this.AbstractLabel.TabIndex = 11;
-            this.AbstractLabel.Text = "AbstractLabel";
+            this.AbstractContent.AutoSize = true;
+            this.AbstractContent.Location = new System.Drawing.Point(22, 206);
+            this.AbstractContent.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.AbstractContent.Name = "AbstractContent";
+            this.AbstractContent.Size = new System.Drawing.Size(83, 13);
+            this.AbstractContent.TabIndex = 11;
+            this.AbstractContent.Text = "AbstractContent";
             // 
-            // BibliographyLabel
+            // BibliographyContent
             // 
-            this.BibliographyLabel.AutoSize = true;
-            this.BibliographyLabel.Location = new System.Drawing.Point(28, 139);
-            this.BibliographyLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.BibliographyLabel.Name = "BibliographyLabel";
-            this.BibliographyLabel.Size = new System.Drawing.Size(90, 13);
-            this.BibliographyLabel.TabIndex = 10;
-            this.BibliographyLabel.Text = "BibliographyLabel";
+            this.BibliographyContent.AutoSize = true;
+            this.BibliographyContent.Location = new System.Drawing.Point(22, 154);
+            this.BibliographyContent.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.BibliographyContent.Name = "BibliographyContent";
+            this.BibliographyContent.Size = new System.Drawing.Size(101, 13);
+            this.BibliographyContent.TabIndex = 10;
+            this.BibliographyContent.Text = "BibliographyContent";
             // 
-            // AuthorLabel
+            // AuthorContent
             // 
-            this.AuthorLabel.AutoSize = true;
-            this.AuthorLabel.Location = new System.Drawing.Point(28, 81);
-            this.AuthorLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.AuthorLabel.Name = "AuthorLabel";
-            this.AuthorLabel.Size = new System.Drawing.Size(64, 13);
-            this.AuthorLabel.TabIndex = 9;
-            this.AuthorLabel.Text = "AuthorLabel";
+            this.AuthorContent.AutoSize = true;
+            this.AuthorContent.Location = new System.Drawing.Point(22, 96);
+            this.AuthorContent.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.AuthorContent.Name = "AuthorContent";
+            this.AuthorContent.Size = new System.Drawing.Size(75, 13);
+            this.AuthorContent.TabIndex = 9;
+            this.AuthorContent.Text = "AuthorContent";
+            // 
+            // TitleContent
+            // 
+            this.TitleContent.AutoSize = true;
+            this.TitleContent.Location = new System.Drawing.Point(22, 40);
+            this.TitleContent.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.TitleContent.Name = "TitleContent";
+            this.TitleContent.Size = new System.Drawing.Size(64, 13);
+            this.TitleContent.TabIndex = 8;
+            this.TitleContent.Text = "TitleContent";
             // 
             // TitleLabel
             // 
             this.TitleLabel.AutoSize = true;
-            this.TitleLabel.Location = new System.Drawing.Point(28, 24);
+            this.TitleLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.TitleLabel.Location = new System.Drawing.Point(22, 21);
             this.TitleLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.TitleLabel.Name = "TitleLabel";
-            this.TitleLabel.Size = new System.Drawing.Size(53, 13);
-            this.TitleLabel.TabIndex = 8;
-            this.TitleLabel.Text = "TitleLabel";
+            this.TitleLabel.Size = new System.Drawing.Size(50, 17);
+            this.TitleLabel.TabIndex = 12;
+            this.TitleLabel.Text = "Title :";
+            // 
+            // AuthorLabel
+            // 
+            this.AuthorLabel.AutoSize = true;
+            this.AuthorLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.AuthorLabel.Location = new System.Drawing.Point(22, 77);
+            this.AuthorLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.AuthorLabel.Name = "AuthorLabel";
+            this.AuthorLabel.Size = new System.Drawing.Size(66, 17);
+            this.AuthorLabel.TabIndex = 13;
+            this.AuthorLabel.Text = "Author :";
+            // 
+            // BibliographyLabel
+            // 
+            this.BibliographyLabel.AutoSize = true;
+            this.BibliographyLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.BibliographyLabel.Location = new System.Drawing.Point(22, 133);
+            this.BibliographyLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.BibliographyLabel.Name = "BibliographyLabel";
+            this.BibliographyLabel.Size = new System.Drawing.Size(113, 17);
+            this.BibliographyLabel.TabIndex = 14;
+            this.BibliographyLabel.Text = "Bibliography : ";
+            // 
+            // AbstractLabel
+            // 
+            this.AbstractLabel.AutoSize = true;
+            this.AbstractLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.AbstractLabel.Location = new System.Drawing.Point(22, 186);
+            this.AbstractLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.AbstractLabel.Name = "AbstractLabel";
+            this.AbstractLabel.Size = new System.Drawing.Size(83, 17);
+            this.AbstractLabel.TabIndex = 15;
+            this.AbstractLabel.Text = "Abstract : ";
             // 
             // DisplayForm
             // 
@@ -94,9 +142,13 @@
             this.AutoSize = true;
             this.ClientSize = new System.Drawing.Size(546, 306);
             this.Controls.Add(this.AbstractLabel);
-            this.Controls.Add(this.TitleLabel);
             this.Controls.Add(this.BibliographyLabel);
             this.Controls.Add(this.AuthorLabel);
+            this.Controls.Add(this.TitleLabel);
+            this.Controls.Add(this.AbstractContent);
+            this.Controls.Add(this.TitleContent);
+            this.Controls.Add(this.BibliographyContent);
+            this.Controls.Add(this.AuthorContent);
             this.Controls.Add(this.CloseButton);
             this.Name = "DisplayForm";
             this.Padding = new System.Windows.Forms.Padding(0, 0, 0, 60);
@@ -109,9 +161,13 @@
         #endregion
 
         private System.Windows.Forms.Button CloseButton;
-        private System.Windows.Forms.Label AbstractLabel;
-        private System.Windows.Forms.Label BibliographyLabel;
-        private System.Windows.Forms.Label AuthorLabel;
+        private System.Windows.Forms.Label AbstractContent;
+        private System.Windows.Forms.Label BibliographyContent;
+        private System.Windows.Forms.Label AuthorContent;
+        private System.Windows.Forms.Label TitleContent;
         private System.Windows.Forms.Label TitleLabel;
+        private System.Windows.Forms.Label AuthorLabel;
+        private System.Windows.Forms.Label BibliographyLabel;
+        private System.Windows.Forms.Label AbstractLabel;
     }
 }

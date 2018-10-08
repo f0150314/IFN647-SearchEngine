@@ -16,14 +16,14 @@ namespace SearchEngine
         public DisplayForm(int ind, Document[] docs)
         {
             InitializeComponent();
-            TitleLabel.Text = "Title:\t" + docs[ind].Get(IndexingClass.FieldTITLE).ToString();
+            TitleContent.Text = docs[ind].Get(IndexingClass.FieldTITLE).ToString().Substring(2);
 
             // The abstract needs to be full abstract
-            AuthorLabel.Text = "Author:\t" + docs[ind].Get(IndexingClass.FieldAUTHOR).ToString();
+            AuthorContent.Text = docs[ind].Get(IndexingClass.FieldAUTHOR).ToString().Substring(2);
 
-            BibliographyLabel.Text = "Bibliography:\t" + docs[ind].Get(IndexingClass.FieldBIBLIO_INFO).ToString();
+            BibliographyContent.Text = docs[ind].Get(IndexingClass.FieldBIBLIO_INFO).ToString().Substring(2);
 
-            AbstractLabel.Text = "Abstract:\n" + docs[ind].Get(IndexingClass.FieldABSTRACT).ToString();
+            AbstractContent.Text = docs[ind].Get(IndexingClass.FieldABSTRACT).ToString();
         }
 
         private void CloseButton_Click(object sender, EventArgs e)
