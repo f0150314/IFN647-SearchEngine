@@ -17,12 +17,8 @@ namespace SearchEngine
         {
             InitializeComponent();
             TitleContent.Text = docs[ind].Get(IndexingClass.FieldTITLE).ToString();
-
-            // The abstract needs to be full abstract
             AuthorContent.Text = docs[ind].Get(IndexingClass.FieldAUTHOR).ToString();
-
             BibliographyContent.Text = docs[ind].Get(IndexingClass.FieldBIBLIO_INFO).ToString();
-
             AbstractContent.Text = docs[ind].Get(IndexingClass.FieldABSTRACT).ToString();
         }
 

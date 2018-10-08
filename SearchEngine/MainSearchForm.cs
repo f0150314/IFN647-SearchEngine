@@ -70,6 +70,7 @@ namespace SearchEngine
             }
         }
 
+        // Enable the textbox after checkbox is checked. If checkbox = false, set to default boost value 1
         private void TitleBoostCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             if (TitleBoostCheckBox.Checked)
@@ -124,6 +125,7 @@ namespace SearchEngine
 
         private void SubmitButton_Click(object sender, EventArgs e)
         {
+            // Check if the both paths are selected before indexing
             if (selectIndexPathState == true && selectCollectionPathState == true)
             {
                 if (TitleBoostCheckBox.Checked)
@@ -154,17 +156,21 @@ namespace SearchEngine
 
         private void SearchButton_Click(object sender, EventArgs e)
         {
+            // Check if the document has already indexed
             if (indexingState == true)
             {
+                // Check if the query is empty
                 if (!(QueryEnter.Text == ""))
-                {                 
+                {     
+                    // Determine whether the query should be remain orginal form 
                     if (PhraseFormCheckbox.Checked)
                         inputQuery = "\"" + QueryEnter.Text + "\"";
                     else
                         inputQuery = QueryEnter.Text;
-                    searching = new SearchingClass();
 
+                    searching = new SearchingClass();
                     stopwatch.Restart();
+
                     // Search the query against the index, the default return size is set to be 30
                     // retrieve the searching result TopDocs object
                     results = searching.SearchIndex(IndexingClass.luceneIndexDirectory, IndexingClass.analyzer, inputQuery);
@@ -173,8 +179,7 @@ namespace SearchEngine
                     string elapsed = stopwatch.Elapsed.ToString();
                     ranked_docs = searching.Get_doc(results);
                     searching.ClearnUpSearcher();
-
-                    
+                  
                     // Display Searching info 
                     FinalQueryLabel.Text = "Final query: " + SearchingClass.finalQuery;
                     SearchingTimeLabel.Text = "Searching time: " + elapsed;
@@ -196,7 +201,6 @@ namespace SearchEngine
                         DisplayItenButton.Hide();
                     }
                 }
-                // Notify user if he/she did not specify topic ID
                 else
                     MessageBox.Show("You need to specify your query");
             }
@@ -235,6 +239,8 @@ namespace SearchEngine
                     //Lucene.Net.Documents.Document doc =
                     //item_title = new ListViewItem(results);
                 }
+
+                // Modify column width
                 SearchedResultView.Columns[0].Width = 30;
                 SearchedResultView.Columns[1].Width = 150;
                 SearchedResultView.Columns[2].Width = 100;
@@ -312,17 +318,20 @@ namespace SearchEngine
             displayWindows.Show();
         }
 
+        // pop up save window
         private void SaveButton_Click(object sender, EventArgs e)
         {
             saveWindow = new SaveResultsForm(results);
             saveWindow.Show();
         }
 
+        // Create results for trec_val evaluation
         private void AutoParsing_Click(object sender, EventArgs e)
         {
             saveInfoDialog.Filter = "Text File|*.txt";
             saveInfoDialog.Title = "Save Text File";
 
+            // Check if it has already indexed
             if (indexingState == true)
             {
                 if (saveInfoDialog.ShowDialog() == DialogResult.OK)
@@ -336,6 +345,7 @@ namespace SearchEngine
                     List<string> infoID = new List<string>();
                     List<string> infoNeeds = new List<string>();
 
+                    // Preprocess the document
                     string[] delimeters = { ".I ", ".D" };
                     string[] infoTokens = Resource.cran_information_needs.Split(delimeters, StringSplitOptions.RemoveEmptyEntries);
                     for (int i = 0; i < infoTokens.Length; i++)
@@ -352,9 +362,9 @@ namespace SearchEngine
                         int rank = 0; 
                         searching = new SearchingClass();
                         TopDocs infoResults = searching.SearchIndex(IndexingClass.luceneIndexDirectory, IndexingClass.analyzer, infoNeed);
-
                         searching.ClearnUpSearcher();
-                        // Check whether the specified file already exists or not
+
+                        // Check whether the specified file is already exists or not
                         if (File.Exists(path))
                         {
                             // Append new results to existing file if it is true
@@ -397,8 +407,6 @@ namespace SearchEngine
             }
             else
                 MessageBox.Show("You need to do indexing before seaching");
-        }
-
-        
+        }        
     }
 }

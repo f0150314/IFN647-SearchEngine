@@ -133,6 +133,7 @@ namespace SearchEngine
             bibliography.Boost = MainSearchForm.bibliBoost;
             abstrat.Boost = MainSearchForm.abstractBoost;
 
+            // Add to the document
             Document doc = new Document();
             doc.Add(doc_ID);
             doc.Add(title);

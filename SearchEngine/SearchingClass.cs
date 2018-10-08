@@ -20,11 +20,11 @@ namespace SearchEngine
         // Initialize class variables
 
         IndexSearcher searcher;
-        QueryParser parser_docid;
-        QueryParser parser_title;
-        QueryParser parser_author;
-        QueryParser parser_bib;
-        QueryParser parser_abstract;
+        //QueryParser parser_docid;
+        //QueryParser parser_title;
+        //QueryParser parser_author;
+        //QueryParser parser_bib;
+        //QueryParser parser_abstract;
         MultiFieldQueryParser multi_field_query_parser;
         public static string finalQuery;
 
@@ -35,7 +35,6 @@ namespace SearchEngine
         {
 
         }
-
 
         // The method that searches the given searching query against the index and showing the number of total hits
 
@@ -58,17 +57,15 @@ namespace SearchEngine
             //parser_bib = new QueryParser(VERSION, IndexingClass.FieldBIBLIO_INFO, searchAnalyzer);
             //parser_abstract = new QueryParser(VERSION, IndexingClass.FieldABSTRACT, searchAnalyzer);
 
-            string query_test = multi_field_query_parser.Field;
-            Console.WriteLine(query_test);
             queryText = queryText.ToLower();
             Query query = multi_field_query_parser.Parse(queryText);           
             TopDocs results = searcher.Search(query, top_n);
-            finalQuery = CreateFinalQuery(query);
+            finalQuery = CreateFinalQueryForDisplay(query);
             return results;
         }
 
         // Create final query for display * still need to improve
-        public string CreateFinalQuery(Query query)
+        public string CreateFinalQueryForDisplay(Query query)
         {
             finalQuery = null;
             ISet<Term> termSet = new HashSet<Term>();
@@ -90,7 +87,6 @@ namespace SearchEngine
             return finalQuery;
         }
 
-
         // The method that dispose the searcher
         public void ClearnUpSearcher()
         {
@@ -111,7 +107,6 @@ namespace SearchEngine
                 // Retrieve the doc and display the text(abstract)
                 //Document doc = searcher.Doc(scoreDoc.Doc);
                 //string myFieldValue = doc.Get(TEXT_FN).ToString();
-
             }
             return ranked_doc;
         }
