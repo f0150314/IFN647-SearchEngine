@@ -42,7 +42,7 @@ namespace SearchEngine
         // Chen whether it is necessary to include the function of searching against title, author etc...
         // *************************************************************************************    
         // return: TopDocs object
-        public TopDocs SearchIndex(Directory luceneIndexDirectory, Analyzer searchAnalyzer, string queryText, int top_n = 500)
+        public TopDocs SearchIndex(Directory luceneIndexDirectory, Analyzer searchAnalyzer, string queryText, bool phraseState, int top_n = 500)
         {
             // Initialize Searcher
             searcher = new IndexSearcher(luceneIndexDirectory);
@@ -62,6 +62,7 @@ namespace SearchEngine
 
 
             Console.WriteLine(query.ToString());
+            // Title:"information retrieval" Author:"information retrieval" 
 
 
             TopDocs results = searcher.Search(query, top_n);
@@ -73,11 +74,12 @@ namespace SearchEngine
         public string CreateFinalQueryForDisplay(Query query)
         {
             finalQuery = null;
+
+
             ISet<Term> termSet = new HashSet<Term>();
             query.ExtractTerms(termSet);
-            Term[] termArray = termSet.ToArray();
             List<string> queryTokenList = new List<string>();
-            foreach (var value in termArray)
+            foreach (var value in termSet)
             {
                 string queryToken = value.ToString().Split(new[] { ':' })[1];
                 if (!queryTokenList.Contains(queryToken))

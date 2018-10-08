@@ -161,9 +161,9 @@ namespace SearchEngine
             {
                 // Check if the query is empty
                 if (!(QueryEnter.Text == ""))
-                {     
+                {
                     // Determine whether the query should be remain orginal form 
-                    if (PhraseFormCheckbox.Checked)
+                    if (PhraseFormCheckbox.Checked)                   
                         inputQuery = "\"" + QueryEnter.Text + "\"";
                     else
                         inputQuery = QueryEnter.Text;
@@ -173,7 +173,7 @@ namespace SearchEngine
 
                     // Search the query against the index, the default return size is set to be 30
                     // retrieve the searching result TopDocs object
-                    results = searching.SearchIndex(IndexingClass.luceneIndexDirectory, IndexingClass.analyzer, inputQuery);
+                    results = searching.SearchIndex(IndexingClass.luceneIndexDirectory, IndexingClass.analyzer, inputQuery, PhraseFormCheckbox.Checked);
                     stopwatch.Stop();
 
                     string elapsed = stopwatch.Elapsed.ToString();
@@ -369,7 +369,7 @@ namespace SearchEngine
                     {
                         int rank = 0; 
                         searching = new SearchingClass();
-                        TopDocs infoResults = searching.SearchIndex(IndexingClass.luceneIndexDirectory, IndexingClass.analyzer, infoNeed);
+                        TopDocs infoResults = searching.SearchIndex(IndexingClass.luceneIndexDirectory, IndexingClass.analyzer, infoNeed, PhraseFormCheckbox.Checked);
                         searching.ClearnUpSearcher();
 
                         // Check whether the specified file is already exists or not
