@@ -90,7 +90,7 @@
             // SaveButton
             // 
             this.SaveButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.SaveButton.Location = new System.Drawing.Point(156, 389);
+            this.SaveButton.Location = new System.Drawing.Point(156, 398);
             this.SaveButton.Name = "SaveButton";
             this.SaveButton.Size = new System.Drawing.Size(105, 31);
             this.SaveButton.TabIndex = 7;
@@ -115,14 +115,14 @@
             this.SearchedResultView.RowTemplate.Height = 60;
             this.SearchedResultView.RowTemplate.ReadOnly = true;
             this.SearchedResultView.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal;
-            this.SearchedResultView.Size = new System.Drawing.Size(889, 220);
+            this.SearchedResultView.Size = new System.Drawing.Size(908, 220);
             this.SearchedResultView.TabIndex = 8;
-            this.SearchedResultView.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.SearchedResultView_CellContentClick);
+            this.SearchedResultView.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.SearchedResultView_CellClick);
             // 
             // DisplayItenButton
             // 
             this.DisplayItenButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.DisplayItenButton.Location = new System.Drawing.Point(12, 389);
+            this.DisplayItenButton.Location = new System.Drawing.Point(12, 398);
             this.DisplayItenButton.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.DisplayItenButton.Name = "DisplayItenButton";
             this.DisplayItenButton.Size = new System.Drawing.Size(128, 31);
@@ -134,10 +134,10 @@
             // PreviousButton
             // 
             this.PreviousButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.PreviousButton.Location = new System.Drawing.Point(745, 389);
+            this.PreviousButton.Location = new System.Drawing.Point(764, 398);
             this.PreviousButton.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.PreviousButton.Name = "PreviousButton";
-            this.PreviousButton.Size = new System.Drawing.Size(70, 20);
+            this.PreviousButton.Size = new System.Drawing.Size(70, 31);
             this.PreviousButton.TabIndex = 10;
             this.PreviousButton.Text = "Previous";
             this.PreviousButton.UseVisualStyleBackColor = true;
@@ -146,10 +146,10 @@
             // NextButton
             // 
             this.NextButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.NextButton.Location = new System.Drawing.Point(830, 389);
+            this.NextButton.Location = new System.Drawing.Point(849, 398);
             this.NextButton.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.NextButton.Name = "NextButton";
-            this.NextButton.Size = new System.Drawing.Size(70, 20);
+            this.NextButton.Size = new System.Drawing.Size(70, 31);
             this.NextButton.TabIndex = 11;
             this.NextButton.Text = "Next";
             this.NextButton.UseVisualStyleBackColor = true;
@@ -170,7 +170,7 @@
             this.IndexingBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.IndexingBox.Location = new System.Drawing.Point(0, 0);
             this.IndexingBox.Name = "IndexingBox";
-            this.IndexingBox.Size = new System.Drawing.Size(392, 151);
+            this.IndexingBox.Size = new System.Drawing.Size(411, 151);
             this.IndexingBox.TabIndex = 12;
             this.IndexingBox.TabStop = false;
             this.IndexingBox.Text = "Indexing";
@@ -180,9 +180,9 @@
             this.PreprocessCheckBox.AutoSize = true;
             this.PreprocessCheckBox.Location = new System.Drawing.Point(23, 102);
             this.PreprocessCheckBox.Name = "PreprocessCheckBox";
-            this.PreprocessCheckBox.Size = new System.Drawing.Size(165, 17);
+            this.PreprocessCheckBox.Size = new System.Drawing.Size(163, 17);
             this.PreprocessCheckBox.TabIndex = 13;
-            this.PreprocessCheckBox.Text = "Preprocessing the information";
+            this.PreprocessCheckBox.Text = "Snallball Analyzer (Stemming)";
             this.PreprocessCheckBox.CheckedChanged += new System.EventHandler(this.PreprocessCheckBox_CheckedChanged);
             // 
             // DirectoryPathLabel
@@ -216,7 +216,7 @@
             // SubmitButton
             // 
             this.SubmitButton.AutoSize = true;
-            this.SubmitButton.Location = new System.Drawing.Point(261, 98);
+            this.SubmitButton.Location = new System.Drawing.Point(258, 99);
             this.SubmitButton.Name = "SubmitButton";
             this.SubmitButton.Size = new System.Drawing.Size(75, 23);
             this.SubmitButton.TabIndex = 17;
@@ -250,7 +250,7 @@
             this.SearchingBox.Controls.Add(this.TotalHitsLabel);
             this.SearchingBox.Location = new System.Drawing.Point(392, 0);
             this.SearchingBox.Name = "SearchingBox";
-            this.SearchingBox.Size = new System.Drawing.Size(519, 151);
+            this.SearchingBox.Size = new System.Drawing.Size(538, 151);
             this.SearchingBox.TabIndex = 13;
             this.SearchingBox.TabStop = false;
             this.SearchingBox.Text = "Searching";
@@ -258,18 +258,18 @@
             // 
             // AutoParsing
             // 
-            this.AutoParsing.Location = new System.Drawing.Point(360, 112);
+            this.AutoParsing.Location = new System.Drawing.Point(332, 112);
             this.AutoParsing.Name = "AutoParsing";
-            this.AutoParsing.Size = new System.Drawing.Size(138, 23);
+            this.AutoParsing.Size = new System.Drawing.Size(179, 23);
             this.AutoParsing.TabIndex = 14;
-            this.AutoParsing.Text = "Five information needs";
+            this.AutoParsing.Text = "Generate results for evaluation";
             this.AutoParsing.UseVisualStyleBackColor = true;
             this.AutoParsing.Click += new System.EventHandler(this.AutoParsing_Click);
             // 
             // PhraseFormCheckbox
             // 
             this.PhraseFormCheckbox.AutoSize = true;
-            this.PhraseFormCheckbox.Location = new System.Drawing.Point(413, 67);
+            this.PhraseFormCheckbox.Location = new System.Drawing.Point(426, 68);
             this.PhraseFormCheckbox.Name = "PhraseFormCheckbox";
             this.PhraseFormCheckbox.Size = new System.Drawing.Size(85, 17);
             this.PhraseFormCheckbox.TabIndex = 14;
@@ -280,7 +280,7 @@
             // 
             this.SearchButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.SearchButton.AutoSize = true;
-            this.SearchButton.Location = new System.Drawing.Point(421, 23);
+            this.SearchButton.Location = new System.Drawing.Point(434, 23);
             this.SearchButton.Name = "SearchButton";
             this.SearchButton.Size = new System.Drawing.Size(77, 23);
             this.SearchButton.TabIndex = 8;
@@ -294,7 +294,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.QueryEnter.Location = new System.Drawing.Point(116, 25);
             this.QueryEnter.Name = "QueryEnter";
-            this.QueryEnter.Size = new System.Drawing.Size(286, 20);
+            this.QueryEnter.Size = new System.Drawing.Size(298, 20);
             this.QueryEnter.TabIndex = 7;
             // 
             // RawQueryLabel
@@ -312,7 +312,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(911, 432);
+            this.ClientSize = new System.Drawing.Size(930, 441);
             this.Controls.Add(this.SearchingBox);
             this.Controls.Add(this.IndexingBox);
             this.Controls.Add(this.NextButton);

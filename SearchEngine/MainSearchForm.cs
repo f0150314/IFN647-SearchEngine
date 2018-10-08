@@ -171,6 +171,10 @@ namespace SearchEngine
                     //Lucene.Net.Documents.Document doc =
                     //item_title = new ListViewItem(results);
                 }
+                SearchedResultView.Columns[0].Width = 30;
+                SearchedResultView.Columns[1].Width = 150;
+                SearchedResultView.Columns[2].Width = 100;
+                SearchedResultView.Columns[3].Width = 100;
             }
 
             if (displayBatch == results.TotalHits / 10)
@@ -196,6 +200,10 @@ namespace SearchEngine
                     //Lucene.Net.Documents.Document doc =
                     //item_title = new ListViewItem(results);
                 }
+                SearchedResultView.Columns[0].Width = 30;
+                SearchedResultView.Columns[1].Width = 150;
+                SearchedResultView.Columns[2].Width = 100;
+                SearchedResultView.Columns[3].Width = 100;
             }
 
             // Show empty info when 0 result is found
@@ -223,7 +231,7 @@ namespace SearchEngine
                 NextButton.Hide();
         }
 
-        private void SearchedResultView_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        private void SearchedResultView_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             selectedItem = e.RowIndex;
         }
