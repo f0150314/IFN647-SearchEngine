@@ -48,7 +48,7 @@ namespace SearchEngine
             searcher = new IndexSearcher(luceneIndexDirectory);
 
             // Initialize multiple field query parser
-            multi_field_query_parser = new MultiFieldQueryParser(VERSION, new string [] { IndexingClass.FieldDOC_ID, IndexingClass.FieldTITLE, IndexingClass.FieldAUTHOR, IndexingClass.FieldBIBLIO_INFO, IndexingClass.FieldABSTRACT}, searchAnalyzer); 
+            multi_field_query_parser = new MultiFieldQueryParser(VERSION, new string [] { IndexingClass.FieldTITLE, IndexingClass.FieldAUTHOR, IndexingClass.FieldBIBLIO_INFO, IndexingClass.FieldABSTRACT}, searchAnalyzer); 
 
             //// Initialize QueryParser
             //parser_docid = new QueryParser(VERSION, IndexingClass.FieldDOC_ID, searchAnalyzer);
@@ -58,7 +58,12 @@ namespace SearchEngine
             //parser_abstract = new QueryParser(VERSION, IndexingClass.FieldABSTRACT, searchAnalyzer);
 
             queryText = queryText.ToLower();
-            Query query = multi_field_query_parser.Parse(queryText);           
+            Query query = multi_field_query_parser.Parse(queryText);
+
+
+            Console.WriteLine(query.ToString());
+
+
             TopDocs results = searcher.Search(query, top_n);
             finalQuery = CreateFinalQueryForDisplay(query);
             return results;
@@ -74,7 +79,6 @@ namespace SearchEngine
             List<string> queryTokenList = new List<string>();
             foreach (var value in termArray)
             {
-                //Console.WriteLine(value.ToString());
                 string queryToken = value.ToString().Split(new[] { ':' })[1];
                 if (!queryTokenList.Contains(queryToken))
                     queryTokenList.Add(queryToken);
@@ -83,7 +87,6 @@ namespace SearchEngine
             {
                 finalQuery += queryToken + ", ";
             }
-
             return finalQuery;
         }
 

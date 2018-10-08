@@ -240,11 +240,14 @@ namespace SearchEngine
                     //item_title = new ListViewItem(results);
                 }
 
-                // Modify column width
-                SearchedResultView.Columns[0].Width = 30;
-                SearchedResultView.Columns[1].Width = 150;
-                SearchedResultView.Columns[2].Width = 100;
-                SearchedResultView.Columns[3].Width = 100;
+                // Modify column width only if datasource has data
+                if (SearchedResultView.DataSource != null)
+                {
+                    SearchedResultView.Columns[0].Width = 30;
+                    SearchedResultView.Columns[1].Width = 150;
+                    SearchedResultView.Columns[2].Width = 100;
+                    SearchedResultView.Columns[3].Width = 100;
+                }
             }
 
             if (displayBatch == results.TotalHits / 10)
@@ -270,10 +273,15 @@ namespace SearchEngine
                     //Lucene.Net.Documents.Document doc =
                     //item_title = new ListViewItem(results);
                 }
-                SearchedResultView.Columns[0].Width = 30;
-                SearchedResultView.Columns[1].Width = 150;
-                SearchedResultView.Columns[2].Width = 100;
-                SearchedResultView.Columns[3].Width = 100;
+
+                // Modify column width only if datasource has data
+                if (SearchedResultView.DataSource != null)
+                {
+                    SearchedResultView.Columns[0].Width = 30;
+                    SearchedResultView.Columns[1].Width = 150;
+                    SearchedResultView.Columns[2].Width = 100;
+                    SearchedResultView.Columns[3].Width = 100;
+                }
             }
 
             // Show empty info when 0 result is found
