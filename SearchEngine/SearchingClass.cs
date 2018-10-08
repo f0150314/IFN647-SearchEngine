@@ -51,12 +51,12 @@ namespace SearchEngine
             // Initialize multiple field query parser
             multi_field_query_parser = new MultiFieldQueryParser(VERSION, new string [] { IndexingClass.FieldDOC_ID, IndexingClass.FieldTITLE, IndexingClass.FieldAUTHOR, IndexingClass.FieldBIBLIO_INFO, IndexingClass.FieldABSTRACT}, searchAnalyzer); 
 
-            // Initialize QueryParser
-            parser_docid = new QueryParser(VERSION, IndexingClass.FieldDOC_ID, searchAnalyzer);
-            parser_title = new QueryParser(VERSION, IndexingClass.FieldTITLE, searchAnalyzer);
-            parser_author = new QueryParser(VERSION, IndexingClass.FieldAUTHOR, searchAnalyzer);
-            parser_bib = new QueryParser(VERSION, IndexingClass.FieldBIBLIO_INFO, searchAnalyzer);
-            parser_abstract = new QueryParser(VERSION, IndexingClass.FieldABSTRACT, searchAnalyzer);
+            //// Initialize QueryParser
+            //parser_docid = new QueryParser(VERSION, IndexingClass.FieldDOC_ID, searchAnalyzer);
+            //parser_title = new QueryParser(VERSION, IndexingClass.FieldTITLE, searchAnalyzer);
+            //parser_author = new QueryParser(VERSION, IndexingClass.FieldAUTHOR, searchAnalyzer);
+            //parser_bib = new QueryParser(VERSION, IndexingClass.FieldBIBLIO_INFO, searchAnalyzer);
+            //parser_abstract = new QueryParser(VERSION, IndexingClass.FieldABSTRACT, searchAnalyzer);
 
             string query_test = multi_field_query_parser.Field;
             Console.WriteLine(query_test);

@@ -22,6 +22,8 @@ namespace SearchEngine
         Stopwatch stopwatch;
 
         bool indexingState = false;
+        bool selectIndexPathState = false;
+        bool selectCollectionPathState = false;
         int selectedItem;
         int displayBatch;
         string inputQuery = null;
@@ -55,6 +57,7 @@ namespace SearchEngine
             if (folderBuildIndexDialog.ShowDialog() == DialogResult.OK)
             {
                 DirectoryPathLabel.Text = folderBuildIndexDialog.SelectedPath;
+                selectIndexPathState = true;
             }
         }
 
@@ -63,32 +66,90 @@ namespace SearchEngine
             if (folderCollectionDialog.ShowDialog() == DialogResult.OK)
             {
                 SourceCollectionPathLabel.Text = folderCollectionDialog.SelectedPath;
+                selectCollectionPathState = true;
+            }
+        }
+
+        private void TitleBoostCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (TitleBoostCheckBox.Checked)
+            {
+                TitleBoostBox.Enabled = true;
+            }
+            else
+            {
+                TitleBoostBox.Enabled = false;
+                titleBoost = 1;
+            }
+        }
+
+        private void AuthorBoostCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (AuthorBoostCheckBox.Checked)
+            {
+                AuthorBoostBox.Enabled = true;
+            }
+            else
+            {
+                AuthorBoostBox.Enabled = false;
+                authorBoost = 1;
+            }
+        }
+
+        private void BibliBoostCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (BibliBoostCheckBox.Checked)
+            {
+                BibliBoostBox.Enabled = true;
+            }
+            else
+            {
+                BibliBoostBox.Enabled = false;
+                bibliBoost = 1;
+            }
+        }
+
+        private void AbstractBoostCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (AbstractBoostCheckBox.Checked)
+            {
+                AbstractBoostBox.Enabled = true;
+            }
+            else
+            {
+                AbstractBoostBox.Enabled = false;
+                abstractBoost = 1;
             }
         }
 
         private void SubmitButton_Click(object sender, EventArgs e)
         {
-            if (TitleBoostCheckBox.Checked)
-                titleBoost = float.Parse(TitleBoostBox.Text);
-            if (AuthorBoostCheckBox.Checked)
-                authorBoost = float.Parse(AuthorBoostBox.Text);
-            if (BibliBoostCheckBox.Checked)
-                bibliBoost = float.Parse(BibliBoostBox.Text);
-            if (AbstractBoostCheckBox.Checked)
-                abstractBoost = float.Parse(AbstractBoostBox.Text);
+            if (selectIndexPathState == true && selectCollectionPathState == true)
+            {
+                if (TitleBoostCheckBox.Checked)
+                    titleBoost = float.Parse(TitleBoostBox.Text);
+                if (AuthorBoostCheckBox.Checked)
+                    authorBoost = float.Parse(AuthorBoostBox.Text);
+                if (BibliBoostCheckBox.Checked)
+                    bibliBoost = float.Parse(BibliBoostBox.Text);
+                if (AbstractBoostCheckBox.Checked)
+                    abstractBoost = float.Parse(AbstractBoostBox.Text);
 
-            stopwatch = new Stopwatch();
-            indexing = new IndexingClass();
+                stopwatch = new Stopwatch();
+                indexing = new IndexingClass();
 
-            stopwatch.Restart();
-            indexing.OpenIndex(DirectoryPathLabel.Text, StemmingCheckBox.Checked);
-            indexing.WalkDirectoryTree(SourceCollectionPathLabel.Text);
-            stopwatch.Stop();
+                stopwatch.Restart();
+                indexing.OpenIndex(DirectoryPathLabel.Text, StemmingCheckBox.Checked);
+                indexing.WalkDirectoryTree(SourceCollectionPathLabel.Text);
+                stopwatch.Stop();
 
-            var timeElapsed = stopwatch.Elapsed;
-            MessageBox.Show($"Indexing time: {timeElapsed} seconds");
-            indexing.CleanUpIndexer();
-            indexingState = true;
+                var timeElapsed = stopwatch.Elapsed;
+                MessageBox.Show($"Indexing time: {timeElapsed} seconds");
+                indexing.CleanUpIndexer();
+                indexingState = true;
+            }
+            else
+                MessageBox.Show("You need to do select both indexing and collection paths before start indexing");
         }
 
         private void SearchButton_Click(object sender, EventArgs e)
@@ -338,56 +399,6 @@ namespace SearchEngine
                 MessageBox.Show("You need to do indexing before seaching");
         }
 
-        private void TitleBoostCheckBox_CheckedChanged(object sender, EventArgs e)
-        {
-            if (TitleBoostCheckBox.Checked)
-            {
-                TitleBoostBox.Enabled = true;
-            }
-            else
-            {
-                TitleBoostBox.Enabled = false;
-                titleBoost = 1;
-            }
-        }
-
-        private void AuthorBoostCheckBox_CheckedChanged(object sender, EventArgs e)
-        {
-            if (AuthorBoostCheckBox.Checked)
-            {
-                AuthorBoostBox.Enabled = true; 
-            }
-            else
-            {
-                AuthorBoostBox.Enabled = false;
-                authorBoost = 1;
-            }
-        }
-
-        private void BibliBoostCheckBox_CheckedChanged(object sender, EventArgs e)
-        {
-            if (BibliBoostCheckBox.Checked)
-            {
-                BibliBoostBox.Enabled = true;
-            }
-            else
-            {
-                BibliBoostBox.Enabled = false;
-                bibliBoost = 1;
-            }
-        }
-
-        private void AbstractBoostCheckBox_CheckedChanged(object sender, EventArgs e)
-        {
-            if (AbstractBoostCheckBox.Checked)
-            {
-                AbstractBoostBox.Enabled = true;
-            }
-            else
-            {
-                AbstractBoostBox.Enabled = false;
-                abstractBoost = 1;
-            }
-        }
+        
     }
 }
