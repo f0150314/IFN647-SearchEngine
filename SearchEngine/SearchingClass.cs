@@ -59,37 +59,55 @@ namespace SearchEngine
 
             queryText = queryText.ToLower();
             Query query = multi_field_query_parser.Parse(queryText);
-
-
-            Console.WriteLine(query.ToString());
-            // Title:"information retrieval" Author:"information retrieval" 
-
-
             TopDocs results = searcher.Search(query, top_n);
-            finalQuery = CreateFinalQueryForDisplay(query);
+            finalQuery = CreateFinalQueryForDisplay(query, phraseState);
             return results;
         }
 
         // Create final query for display * still need to improve
-        public string CreateFinalQueryForDisplay(Query query)
+        public string CreateFinalQueryForDisplay(Query query, bool phraseState)
         {
             finalQuery = null;
 
+            // if user selects phrase option 
+            if (phraseState)
+            {
+                // if it is multiple term phrase (Information needs: "Information retrieval")
+                if (query.ToString().Contains("\""))
+                {
+                    finalQuery = query.ToString().Split(new[] { '\"' })[1];
+                    return finalQuery;
+                }
 
-            ISet<Term> termSet = new HashSet<Term>();
-            query.ExtractTerms(termSet);
-            List<string> queryTokenList = new List<string>();
-            foreach (var value in termSet)
-            {
-                string queryToken = value.ToString().Split(new[] { ':' })[1];
-                if (!queryTokenList.Contains(queryToken))
-                    queryTokenList.Add(queryToken);
+                // if it is single term but using phrase option (Information needs: "Information")
+                else
+                {
+                    finalQuery = query.ToString().Split(new[] { ':', ' ' })[1];
+                    return finalQuery;
+                }
             }
-            foreach (var queryToken in queryTokenList)
+
+            // if user does ont select phrase option
+            else
             {
-                finalQuery += queryToken + ", ";
+                ISet<Term> termSet = new HashSet<Term>();
+                query.ExtractTerms(termSet);
+                List<string> queryTokenList = new List<string>();
+                foreach (var value in termSet)
+                {
+                    string queryToken = value.ToString().Split(new[] { ':' })[1];
+                    if (!queryTokenList.Contains(queryToken))
+                        queryTokenList.Add(queryToken);
+                }
+                for (int i = 0; i < queryTokenList.Count; i++)
+                {
+                    if (i == 0)
+                        finalQuery += queryTokenList[i];
+                    else
+                        finalQuery += ", " + queryTokenList[i];
+                }
+                return finalQuery;
             }
-            return finalQuery;
         }
 
         // The method that dispose the searcher
