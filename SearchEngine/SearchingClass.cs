@@ -40,9 +40,17 @@ namespace SearchEngine
         // return: TopDocs object
         public TopDocs SearchIndex(Directory luceneIndexDirectory, Analyzer analyzer, string queryText, bool phraseState, int top_n = 500)
         {
-            // Initialize Searcher and Writer
-            searcher = new IndexSearcher(luceneIndexDirectory);         
-            searcher.Similarity = IndexingClass.writer.Similarity;
+            // Initialize Searcher and Writer and set similarity
+            searcher = new IndexSearcher(luceneIndexDirectory);           
+            IndexWriter.MaxFieldLength mfl = new IndexWriter.MaxFieldLength(IndexWriter.DEFAULT_MAX_FIELD_LENGTH);
+            IndexWriter writer = new IndexWriter(luceneIndexDirectory, analyzer, true, mfl);
+            writer.SetSimilarity(new NewSimilarity());
+            searcher.Similarity = writer.Similarity;
+
+            // Clean up Indexer
+            writer.Optimize();
+            writer.Flush(true, true, true);
+            writer.Dispose();
 
             // Initialize multiple field query parser
             multi_field_query_parser = new MultiFieldQueryParser(VERSION, new string [] { IndexingClass.FieldTITLE, IndexingClass.FieldAUTHOR, IndexingClass.FieldBIBLIO_INFO, IndexingClass.FieldABSTRACT}, analyzer); 
@@ -73,6 +81,7 @@ namespace SearchEngine
             }
             ///
             ///
+
 
             finalQuery = CreateFinalQueryForDisplay(query, phraseState);
             return results;

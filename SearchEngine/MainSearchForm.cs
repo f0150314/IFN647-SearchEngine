@@ -18,7 +18,6 @@ namespace SearchEngine
     {
         IndexingClass indexing;
         SearchingClass searching;
-        SaveResultsForm saveWindow;
         Stopwatch stopwatch = new Stopwatch();
 
         bool indexingState = false;
@@ -143,7 +142,9 @@ namespace SearchEngine
                 indexing.OpenIndex(DirectoryPathLabel.Text, StemmingCheckBox.Checked);
                 indexing.WalkDirectoryTree(SourceCollectionPathLabel.Text);
                 stopwatch.Stop();
-
+                
+                ///
+                indexing.CleanUpIndexer();
                 MessageBox.Show($"Indexing time: {stopwatch.Elapsed.ToString()} seconds");
                 indexingState = true;
             }
@@ -173,16 +174,14 @@ namespace SearchEngine
                     results = searching.SearchIndex(IndexingClass.luceneIndexDirectory, IndexingClass.analyzer, inputQuery, PhraseFormCheckbox.Checked);
                     stopwatch.Stop();
 
-                    ranked_docs = searching.Get_doc(results);
-
-                    // Clean up Searcher
-                    indexing.CleanUpIndexer();
-                    searching.ClearnUpSearcher();
-                  
-                    // Display Searching info 
+                    // Display Searching info                   
                     FinalQueryLabel.Text = "Final query: " + SearchingClass.finalQuery;
                     SearchingTimeLabel.Text = "Searching time: " + stopwatch.Elapsed.ToString();
                     TotalHitsLabel.Text = "Total hits: " + results.TotalHits;
+
+                    // Acquire the ranked documents and display the results and clean up searcher
+                    ranked_docs = searching.Get_doc(results);
+                    searching.ClearnUpSearcher();
                     DisplayResult(results, ranked_docs, displayBatch = 0);
 
                     // Only show these button when totalhits is not zero
@@ -328,7 +327,7 @@ namespace SearchEngine
         // pop up save window
         private void SaveButton_Click(object sender, EventArgs e)
         {
-            saveWindow = new SaveResultsForm(results);
+            SaveResultsForm saveWindow = new SaveResultsForm(results);
             saveWindow.Show();
         }
 
