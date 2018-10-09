@@ -19,7 +19,7 @@ namespace SearchEngine
         IndexingClass indexing;
         SearchingClass searching;
         SaveResultsForm saveWindow;
-        Stopwatch stopwatch;
+        Stopwatch stopwatch = new Stopwatch();
 
         bool indexingState = false;
         bool selectIndexPathState = false;
@@ -33,7 +33,6 @@ namespace SearchEngine
         public static float authorBoost = 1;
         public static float bibliBoost = 1;
         public static float abstractBoost = 1;
-
 
         public MainSearchForm()
         {           
@@ -137,17 +136,15 @@ namespace SearchEngine
                 if (AbstractBoostCheckBox.Checked)
                     abstractBoost = float.Parse(AbstractBoostBox.Text);
 
-                stopwatch = new Stopwatch();
-                indexing = new IndexingClass();
+                indexing = new IndexingClass();               
 
+                // Record indexing time
                 stopwatch.Restart();
                 indexing.OpenIndex(DirectoryPathLabel.Text, StemmingCheckBox.Checked);
                 indexing.WalkDirectoryTree(SourceCollectionPathLabel.Text);
                 stopwatch.Stop();
 
-                var timeElapsed = stopwatch.Elapsed;
-                MessageBox.Show($"Indexing time: {timeElapsed} seconds");
-                indexing.CleanUpIndexer();
+                MessageBox.Show($"Indexing time: {stopwatch.Elapsed.ToString()} seconds");
                 indexingState = true;
             }
             else
@@ -169,20 +166,22 @@ namespace SearchEngine
                         inputQuery = QueryEnter.Text;
 
                     searching = new SearchingClass();
-                    stopwatch.Restart();
 
                     // Search the query against the index, the default return size is set to be 30
                     // retrieve the searching result TopDocs object
+                    stopwatch.Restart();             
                     results = searching.SearchIndex(IndexingClass.luceneIndexDirectory, IndexingClass.analyzer, inputQuery, PhraseFormCheckbox.Checked);
                     stopwatch.Stop();
 
-                    string elapsed = stopwatch.Elapsed.ToString();
                     ranked_docs = searching.Get_doc(results);
+
+                    // Clean up Searcher
+                    indexing.CleanUpIndexer();
                     searching.ClearnUpSearcher();
                   
                     // Display Searching info 
                     FinalQueryLabel.Text = "Final query: " + SearchingClass.finalQuery;
-                    SearchingTimeLabel.Text = "Searching time: " + elapsed;
+                    SearchingTimeLabel.Text = "Searching time: " + stopwatch.Elapsed.ToString();
                     TotalHitsLabel.Text = "Total hits: " + results.TotalHits;
                     DisplayResult(results, ranked_docs, displayBatch = 0);
 

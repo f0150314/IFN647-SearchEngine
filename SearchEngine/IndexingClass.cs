@@ -16,25 +16,22 @@ namespace SearchEngine
 {
     public class IndexingClass
     {
-        System.IO.StreamReader reader;
-        IndexWriter writer;
-        ISet<string> stopwords;
-
-        public static Directory luceneIndexDirectory;
-        public static Analyzer analyzer;
         
-        const Lucene.Net.Util.Version VERSION = Lucene.Net.Util.Version.LUCENE_30;
+        NewSimilarity newSimilarity;
+        System.IO.StreamReader reader;
+        ISet<string> stopwords;  
+        public static IndexWriter writer;
+        public static Analyzer analyzer;
+        public static Directory luceneIndexDirectory;
         public static string FieldDOC_ID = "DocID";
         public static string FieldTITLE = "Title";
         public static string FieldAUTHOR = "Author";
         public static string FieldBIBLIO_INFO = "BiblioInfo";
         public static string FieldABSTRACT = "Abstract";
+        const Lucene.Net.Util.Version VERSION = Lucene.Net.Util.Version.LUCENE_30;
 
         public IndexingClass()
         {
-            reader = null;
-            luceneIndexDirectory = null;
-            writer = null;
             stopwords = Stopwords();
         }
 
@@ -49,22 +46,22 @@ namespace SearchEngine
         }
 
         // Open index and initialize analyzer and indexWriter
-        public void OpenIndex(string DirectoryPath, bool processingState)
+        public void OpenIndex(string DirectoryPath, bool stemmingState)
         {
+            // Initilize the class instance
             luceneIndexDirectory = FSDirectory.Open(DirectoryPath);
             IndexWriter.MaxFieldLength mfl = new IndexWriter.MaxFieldLength(IndexWriter.DEFAULT_MAX_FIELD_LENGTH);
             
             // Decide which analyzer should be used
-            if (!processingState)
-            {
-                analyzer = new StandardAnalyzer(VERSION, stopwords);
-                writer = new IndexWriter(luceneIndexDirectory, analyzer, true, mfl);
-            }
+            if (!stemmingState)
+                analyzer = new StandardAnalyzer(VERSION, stopwords);               
             else
-            {
                 analyzer = new SnowballAnalyzer(VERSION, "English", stopwords);
-                writer = new IndexWriter(luceneIndexDirectory, analyzer, true, mfl);
-            }
+
+            // Set similarity     
+            newSimilarity = new NewSimilarity();
+            writer = new IndexWriter(luceneIndexDirectory, analyzer, true, mfl);
+            writer.SetSimilarity(newSimilarity);
         }
 
         // Read through all files
@@ -96,7 +93,6 @@ namespace SearchEngine
                     string name = fi.FullName;
                     IndexingDocuments(name);
                 }
-                reader.Close();
 
                 // Now find all the subdirectories under this directory.
                 subDirs = root.GetDirectories();
@@ -113,9 +109,15 @@ namespace SearchEngine
         // Preprocess documents and add to index
         public void IndexingDocuments(string name)
         {
+            string text = null;
+            
+            // Read the file
+            using (reader = new System.IO.StreamReader(name))
+            {
+                text = reader.ReadToEnd();
+            }
+
             // Preprocessing document (remove abstract error)
-            reader = new System.IO.StreamReader(name);
-            string text = reader.ReadToEnd();
             string[] delimiters = { ".I ", ".T", ".A", ".B", ".W" };
             string[] docInfo = text.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
             docInfo[4] = docInfo[4].Remove(0, docInfo[1].Length);

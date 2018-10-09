@@ -7,8 +7,11 @@ using Lucene.Net.Search;
 
 namespace SearchEngine
 {
-    class NewSimilarity : DefaultSimilarity
+    public class NewSimilarity : DefaultSimilarity
     {
-        
+        public override float Tf(float freq)
+        {
+            return 30;
+        }
     }
 }
