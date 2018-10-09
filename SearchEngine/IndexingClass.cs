@@ -16,11 +16,9 @@ namespace SearchEngine
 {
     public class IndexingClass
     {
-        
-        NewSimilarity newSimilarity;
+        IndexWriter writer;
         System.IO.StreamReader reader;
-        ISet<string> stopwords;  
-        public static IndexWriter writer;
+        ISet<string> stopwords;      
         public static Analyzer analyzer;
         public static Directory luceneIndexDirectory;
         public static string FieldDOC_ID = "DocID";
@@ -32,7 +30,7 @@ namespace SearchEngine
 
         public IndexingClass()
         {
-            stopwords = Stopwords();
+
         }
 
         // Create stopwords list
@@ -48,6 +46,8 @@ namespace SearchEngine
         // Open index and initialize analyzer and indexWriter
         public void OpenIndex(string DirectoryPath, bool stemmingState)
         {
+            stopwords = Stopwords();
+
             // Initilize the class instance
             luceneIndexDirectory = FSDirectory.Open(DirectoryPath);
             IndexWriter.MaxFieldLength mfl = new IndexWriter.MaxFieldLength(IndexWriter.DEFAULT_MAX_FIELD_LENGTH);
@@ -59,9 +59,8 @@ namespace SearchEngine
                 analyzer = new SnowballAnalyzer(VERSION, "English", stopwords);
 
             // Set similarity     
-            newSimilarity = new NewSimilarity();
             writer = new IndexWriter(luceneIndexDirectory, analyzer, true, mfl);
-            writer.SetSimilarity(newSimilarity);
+            writer.SetSimilarity(new NewSimilarity());
         }
 
         // Read through all files

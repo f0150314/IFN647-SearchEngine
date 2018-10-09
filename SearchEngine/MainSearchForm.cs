@@ -142,8 +142,8 @@ namespace SearchEngine
                 indexing.OpenIndex(DirectoryPathLabel.Text, StemmingCheckBox.Checked);
                 indexing.WalkDirectoryTree(SourceCollectionPathLabel.Text);
                 stopwatch.Stop();
-                
-                ///
+
+                // Clean up indexer
                 indexing.CleanUpIndexer();
                 MessageBox.Show($"Indexing time: {stopwatch.Elapsed.ToString()} seconds");
                 indexingState = true;
