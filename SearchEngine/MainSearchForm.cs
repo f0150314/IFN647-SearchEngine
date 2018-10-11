@@ -162,6 +162,8 @@ namespace SearchEngine
                 MessageBox.Show("Don't forget to load wordnet database");
                 LoadDatabaseButton.Enabled = true;
             }
+            else
+                LoadDatabaseButton.Enabled = false;
         }
 
         // Load wordnet data
