@@ -61,7 +61,7 @@ namespace SearchEngine
                                 }
 
                                 // Write to the file
-                                stwriter.WriteLine("{0,-4} {1,-4} {2,-7} {3,-5} {4,-11} {5}", topicID, "Q0", documentID, rank, scorDoc.Score, "n9843329_n9861718_HelloWorldteam");
+                                stwriter.WriteLine("{0,-4} {1,-4} {2,-7} {3,-5} {4,-11} {5}", topicID, "Q0", documentID, rank, scorDoc.Score, "n9843329_n9861718_n5767032_HelloWorldTeam");
                             }
                         }
                     }                  
@@ -78,7 +78,7 @@ namespace SearchEngine
                                     documentID = searcher.Doc(scorDoc.Doc).Get(IndexingClass.FieldDOC_ID).ToString();
                                     documentID = documentID.Split(new[] { '\n' })[0];
                                 }
-                                stwriter.WriteLine("{0,-4} {1,-4} {2,-7} {3,-5} {4,-11} {5}", topicID, "Q0", documentID, rank, scorDoc.Score, "n9843329_n9861718_HelloWorldteam");
+                                stwriter.WriteLine("{0,-4} {1,-4} {2,-7} {3,-5} {4,-11} {5}", topicID, "Q0", documentID, rank, scorDoc.Score, "n9843329_n9861718_n5767032_HelloWorldTeam");
                             }
                         }
                     }
