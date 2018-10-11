@@ -63,6 +63,7 @@ namespace SearchEngine
             //parser_abstract = new QueryParser(VERSION, IndexingClass.FieldABSTRACT, searchAnalyzer);
 
             Query query = multi_field_query_parser.Parse(queryText.ToLower());
+            finalQuery = CreateFinalQueryForDisplay(query, phraseState);
             TopDocs results = searcher.Search(query, top_n);
 
 
@@ -81,9 +82,7 @@ namespace SearchEngine
             }
             ///
             ///
-
-
-            finalQuery = CreateFinalQueryForDisplay(query, phraseState);
+         
             return results;
         }
 
@@ -122,13 +121,8 @@ namespace SearchEngine
                     if (!queryTokenList.Contains(queryToken))
                         queryTokenList.Add(queryToken);
                 }
-                for (int i = 0; i < queryTokenList.Count; i++)
-                {
-                    if (i == 0)
-                        finalQuery += queryTokenList[i];
-                    else
-                        finalQuery += ", " + queryTokenList[i];
-                }
+
+                finalQuery = string.Join(", ", queryTokenList.ToArray());
                 return finalQuery;
             }
         }
