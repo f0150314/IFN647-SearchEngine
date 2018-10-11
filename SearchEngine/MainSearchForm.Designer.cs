@@ -53,6 +53,8 @@
             this.SubmitButton = new System.Windows.Forms.Button();
             this.CollectionButton = new System.Windows.Forms.Button();
             this.SearchingBox = new System.Windows.Forms.GroupBox();
+            this.QueryExpansionCheckBox = new System.Windows.Forms.CheckBox();
+            this.LoadDatabaseButton = new System.Windows.Forms.Button();
             this.AutoParsing = new System.Windows.Forms.Button();
             this.PhraseFormCheckbox = new System.Windows.Forms.CheckBox();
             this.SearchButton = new System.Windows.Forms.Button();
@@ -70,7 +72,7 @@
             // FinalQueryLabel
             // 
             this.FinalQueryLabel.AutoSize = true;
-            this.FinalQueryLabel.Location = new System.Drawing.Point(18, 127);
+            this.FinalQueryLabel.Location = new System.Drawing.Point(18, 147);
             this.FinalQueryLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.FinalQueryLabel.Name = "FinalQueryLabel";
             this.FinalQueryLabel.Size = new System.Drawing.Size(58, 13);
@@ -80,7 +82,7 @@
             // SearchingTimeLabel
             // 
             this.SearchingTimeLabel.AutoSize = true;
-            this.SearchingTimeLabel.Location = new System.Drawing.Point(18, 154);
+            this.SearchingTimeLabel.Location = new System.Drawing.Point(18, 174);
             this.SearchingTimeLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.SearchingTimeLabel.Name = "SearchingTimeLabel";
             this.SearchingTimeLabel.Size = new System.Drawing.Size(80, 13);
@@ -90,7 +92,7 @@
             // TotalHitsLabel
             // 
             this.TotalHitsLabel.AutoSize = true;
-            this.TotalHitsLabel.Location = new System.Drawing.Point(18, 182);
+            this.TotalHitsLabel.Location = new System.Drawing.Point(18, 202);
             this.TotalHitsLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.TotalHitsLabel.Name = "TotalHitsLabel";
             this.TotalHitsLabel.Size = new System.Drawing.Size(50, 13);
@@ -335,6 +337,8 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.SearchingBox.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.SearchingBox.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.SearchingBox.Controls.Add(this.QueryExpansionCheckBox);
+            this.SearchingBox.Controls.Add(this.LoadDatabaseButton);
             this.SearchingBox.Controls.Add(this.AutoParsing);
             this.SearchingBox.Controls.Add(this.PhraseFormCheckbox);
             this.SearchingBox.Controls.Add(this.SearchButton);
@@ -350,9 +354,30 @@
             this.SearchingBox.TabStop = false;
             this.SearchingBox.Text = "Searching";
             // 
+            // QueryExpansionCheckBox
+            // 
+            this.QueryExpansionCheckBox.AutoSize = true;
+            this.QueryExpansionCheckBox.Location = new System.Drawing.Point(19, 71);
+            this.QueryExpansionCheckBox.Name = "QueryExpansionCheckBox";
+            this.QueryExpansionCheckBox.Size = new System.Drawing.Size(91, 17);
+            this.QueryExpansionCheckBox.TabIndex = 21;
+            this.QueryExpansionCheckBox.Text = "Expand query";
+            this.QueryExpansionCheckBox.CheckedChanged += new System.EventHandler(this.QueryExpansionCheckBox_CheckedChanged);
+            // 
+            // LoadDatabaseButton
+            // 
+            this.LoadDatabaseButton.AutoSize = true;
+            this.LoadDatabaseButton.Location = new System.Drawing.Point(118, 63);
+            this.LoadDatabaseButton.Name = "LoadDatabaseButton";
+            this.LoadDatabaseButton.Size = new System.Drawing.Size(152, 32);
+            this.LoadDatabaseButton.TabIndex = 20;
+            this.LoadDatabaseButton.Text = "Load Wordnet Database";
+            this.LoadDatabaseButton.UseVisualStyleBackColor = true;
+            this.LoadDatabaseButton.Click += new System.EventHandler(this.LoadDatabaseButton_Click);
+            // 
             // AutoParsing
             // 
-            this.AutoParsing.Location = new System.Drawing.Point(308, 131);
+            this.AutoParsing.Location = new System.Drawing.Point(322, 159);
             this.AutoParsing.Name = "AutoParsing";
             this.AutoParsing.Size = new System.Drawing.Size(166, 58);
             this.AutoParsing.TabIndex = 14;
@@ -363,7 +388,7 @@
             // PhraseFormCheckbox
             // 
             this.PhraseFormCheckbox.AutoSize = true;
-            this.PhraseFormCheckbox.Location = new System.Drawing.Point(21, 62);
+            this.PhraseFormCheckbox.Location = new System.Drawing.Point(19, 106);
             this.PhraseFormCheckbox.Name = "PhraseFormCheckbox";
             this.PhraseFormCheckbox.Size = new System.Drawing.Size(85, 17);
             this.PhraseFormCheckbox.TabIndex = 14;
@@ -462,5 +487,7 @@
         private System.Windows.Forms.CheckBox BibliBoostCheckBox;
         private System.Windows.Forms.CheckBox AuthorBoostCheckBox;
         private System.Windows.Forms.CheckBox TitleBoostCheckBox;
+        private System.Windows.Forms.CheckBox QueryExpansionCheckBox;
+        private System.Windows.Forms.Button LoadDatabaseButton;
     }
 }

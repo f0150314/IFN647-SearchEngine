@@ -11,6 +11,7 @@ using Lucene.Net.Search;
 using Lucene.Net.Documents;
 using System.Diagnostics;
 using System.IO;
+using Syn.WordNet;
 
 namespace SearchEngine
 {
@@ -26,6 +27,7 @@ namespace SearchEngine
         int selectedItem;
         int displayBatch;
         string inputQuery = null;
+        public static WordNetEngine wordNet = new WordNetEngine();
         public static Document[] ranked_docs;
         public static TopDocs results;
         public static float titleBoost = 1;
@@ -40,6 +42,7 @@ namespace SearchEngine
             AuthorBoostBox.Enabled = false;
             BibliBoostBox.Enabled = false;
             AbstractBoostBox.Enabled = false;
+            LoadDatabaseButton.Enabled = false;
             TitleBoostBox.Text = "1.0";
             AuthorBoostBox.Text = "1.0";
             BibliBoostBox.Text = "1.0";
@@ -152,6 +155,26 @@ namespace SearchEngine
                 MessageBox.Show("You need to do select both indexing and collection paths before start indexing");
         }
 
+        private void QueryExpansionCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (QueryExpansionCheckBox.Checked && !wordNet.IsLoaded)
+            {
+                MessageBox.Show("Don't forget to load wordnet database");
+                LoadDatabaseButton.Enabled = true;
+            }
+        }
+
+        // Load wordnet data
+        private void LoadDatabaseButton_Click(object sender, EventArgs e)
+        {
+            string directoryPath = Directory.GetCurrentDirectory();
+            MessageBox.Show("Loading database");
+            wordNet.LoadFromDirectory(directoryPath);
+            MessageBox.Show("Load completed");
+            LoadDatabaseButton.Text = "Database is loaded.";
+            LoadDatabaseButton.Enabled = false;
+        }
+
         private void SearchButton_Click(object sender, EventArgs e)
         {
             // Check if the document has already indexed
@@ -171,11 +194,11 @@ namespace SearchEngine
                     // Search the query against the index, the default return size is set to be 30
                     // retrieve the searching result TopDocs object
                     stopwatch.Restart();             
-                    results = searching.SearchIndex(IndexingClass.luceneIndexDirectory, IndexingClass.analyzer, inputQuery, PhraseFormCheckbox.Checked);
+                    results = searching.SearchIndex(IndexingClass.luceneIndexDirectory, IndexingClass.analyzer, inputQuery, PhraseFormCheckbox.Checked, QueryExpansionCheckBox.Checked);
                     stopwatch.Stop();
 
                     // Display Searching info                   
-                    FinalQueryLabel.Text = "Final query: " + SearchingClass.finalQuery;
+                    FinalQueryLabel.Text = "Final query: " + SearchingClass.finalQueryDisplay;
                     SearchingTimeLabel.Text = "Searching time: " + stopwatch.Elapsed.ToString();
                     TotalHitsLabel.Text = "Total hits: " + results.TotalHits;
 
@@ -367,7 +390,7 @@ namespace SearchEngine
                     {
                         int rank = 0; 
                         searching = new SearchingClass();
-                        TopDocs infoResults = searching.SearchIndex(IndexingClass.luceneIndexDirectory, IndexingClass.analyzer, infoNeed, PhraseFormCheckbox.Checked);
+                        TopDocs infoResults = searching.SearchIndex(IndexingClass.luceneIndexDirectory, IndexingClass.analyzer, infoNeed, PhraseFormCheckbox.Checked, QueryExpansionCheckBox.Checked);
                         searching.ClearnUpSearcher();
 
                         // Check whether the specified file is already exists or not
@@ -413,6 +436,6 @@ namespace SearchEngine
             }
             else
                 MessageBox.Show("You need to do indexing before seaching");
-        }        
+        }
     }
 }

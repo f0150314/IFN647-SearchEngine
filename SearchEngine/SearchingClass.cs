@@ -10,6 +10,7 @@ using Lucene.Net.Index;
 using Lucene.Net.Store;
 using Lucene.Net.Search;
 using Lucene.Net.QueryParsers;
+using Syn.WordNet;
 
 namespace SearchEngine
 {
@@ -18,27 +19,17 @@ namespace SearchEngine
         // Initialize class variables
         IndexSearcher searcher;
         MultiFieldQueryParser multi_field_query_parser;
-        public static string finalQuery;
+        List<string> finalQueryTokenList;
+        public static string finalQueryDisplay;
         const Lucene.Net.Util.Version VERSION = Lucene.Net.Util.Version.LUCENE_30;
-
-        //QueryParser parser_docid;
-        //QueryParser parser_title;
-        //QueryParser parser_author;
-        //QueryParser parser_bib;
-        //QueryParser parser_abstract;
 
         public SearchingClass()
         {
 
         }
 
-        // The method that searches the given searching query against the index and showing the number of total hits
-
-        // *************************************************************************************
-        // Chen whether it is necessary to include the function of searching against title, author etc...
-        // *************************************************************************************    
-        // return: TopDocs object
-        public TopDocs SearchIndex(Directory luceneIndexDirectory, Analyzer analyzer, string queryText, bool phraseState, int top_n = 500)
+        // Search Index
+        public TopDocs SearchIndex(Directory luceneIndexDirectory, Analyzer analyzer, string queryText, bool phraseState, bool wordNetSelection,int top_n = 500)
         {
             // Initialize Searcher and Writer and set similarity
             searcher = new IndexSearcher(luceneIndexDirectory);
@@ -53,43 +44,104 @@ namespace SearchEngine
             writer.Dispose();
 
             // Initialize multiple field query parser
-            multi_field_query_parser = new MultiFieldQueryParser(VERSION, new string [] { IndexingClass.FieldTITLE, IndexingClass.FieldAUTHOR, IndexingClass.FieldBIBLIO_INFO, IndexingClass.FieldABSTRACT}, analyzer); 
+            multi_field_query_parser = new MultiFieldQueryParser(VERSION, new string [] { IndexingClass.FieldTITLE, IndexingClass.FieldAUTHOR, IndexingClass.FieldBIBLIO_INFO, IndexingClass.FieldABSTRACT}, analyzer);
 
-            //// Initialize QueryParser
-            //parser_docid = new QueryParser(VERSION, IndexingClass.FieldDOC_ID, searchAnalyzer);
-            //parser_title = new QueryParser(VERSION, IndexingClass.FieldTITLE, searchAnalyzer);
-            //parser_author = new QueryParser(VERSION, IndexingClass.FieldAUTHOR, searchAnalyzer);
-            //parser_bib = new QueryParser(VERSION, IndexingClass.FieldBIBLIO_INFO, searchAnalyzer);
-            //parser_abstract = new QueryParser(VERSION, IndexingClass.FieldABSTRACT, searchAnalyzer);
-
+            // User information needs -> Query query
             Query query = multi_field_query_parser.Parse(queryText.ToLower());
-            finalQuery = CreateFinalQueryForDisplay(query, phraseState);
-            TopDocs results = searcher.Search(query, top_n);
 
+            // Query query ->  final query
+            finalQueryDisplay = CreateFinalQuery(query, phraseState);
 
-            /// <summary>
-            /// This section provides explanation for the similarity output, 
-            /// delete this after determining the final similarity measures.
-            /// <summary>
-            int rank = 0;
-            foreach (ScoreDoc scoreDoc in results.ScoreDocs)
+            // If wordNet option is selected and wordnet database is loaded and not phrase
+            if (wordNetSelection && MainSearchForm.wordNet.IsLoaded && !phraseState)
             {
-                rank++;
-                Document doc = searcher.Doc(scoreDoc.Doc);
-                string value = doc.Get(IndexingClass.FieldABSTRACT).ToString();
-                Console.WriteLine("Rank: " + rank + ", Doc_idx: " + scoreDoc.Doc + ", text: " + value + ", relevance score: " + scoreDoc.Score);
-                Console.WriteLine(searcher.Explain(query, scoreDoc.Doc));
+                // final query -> wordnet  (ignore phrase because wordnet do not accpet phrase input)
+                string[] expandedQueryArray = null;
+                foreach (var finalQueryToken in finalQueryTokenList)
+                {
+                    expandedQueryArray = QueryExpansion(finalQueryToken);
+                }
+
+                // if wordnet does not produce any query
+                if (expandedQueryArray.Length == 0)
+                {
+                    TopDocs results = searcher.Search(query, top_n);
+
+                    ///// <summary>
+                    ///// This section provides explanation for the similarity output, 
+                    ///// delete this after determining the final similarity measures.
+                    ///// <summary>
+                    //int rank = 0;
+                    //foreach (ScoreDoc scoreDoc in results.ScoreDocs)
+                    //{
+                    //    rank++;
+                    //    Document doc = searcher.Doc(scoreDoc.Doc);
+                    //    string value = doc.Get(IndexingClass.FieldABSTRACT).ToString();
+                    //    Console.WriteLine("Rank: " + rank + ", Doc_idx: " + scoreDoc.Doc + ", text: " + value + ", relevance score: " + scoreDoc.Score);
+                    //    Console.WriteLine(searcher.Explain(query, scoreDoc.Doc));
+                    //}
+                    /////
+                    /////
+
+                    return results;
+                }
+
+                // if the number of expanded queries is not zero
+                else
+                {
+                    // Create expanded query for searching
+                    string expandedQueryConcatenation = string.Join(" ", expandedQueryArray);
+                    //Console.WriteLine(expandedQueryConcatenation);
+                    Query expandedQuery = multi_field_query_parser.Parse(expandedQueryConcatenation);
+                    TopDocs results = searcher.Search(expandedQuery, top_n);
+
+                    ///// <summary>
+                    ///// This section provides explanation for the similarity output, 
+                    ///// delete this after determining the final similarity measures.
+                    ///// <summary>
+                    //int rank = 0;
+                    //foreach (ScoreDoc scoreDoc in results.ScoreDocs)
+                    //{
+                    //    rank++;
+                    //    Document doc = searcher.Doc(scoreDoc.Doc);
+                    //    string value = doc.Get(IndexingClass.FieldABSTRACT).ToString();
+                    //    Console.WriteLine("Rank: " + rank + ", Doc_idx: " + scoreDoc.Doc + ", text: " + value + ", relevance score: " + scoreDoc.Score);
+                    //    Console.WriteLine(searcher.Explain(expandedQuery, scoreDoc.Doc));
+                    //}
+                    /////
+                    /////
+
+                    return results;
+                }
             }
-            ///
-            ///
-         
-            return results;
+            else
+            {
+                TopDocs results = searcher.Search(query, top_n);
+
+                ///// <summary>
+                ///// This section provides explanation for the similarity output, 
+                ///// delete this after determining the final similarity measures.
+                ///// <summary>
+                //int rank = 0;
+                //foreach (ScoreDoc scoreDoc in results.ScoreDocs)
+                //{
+                //    rank++;
+                //    Document doc = searcher.Doc(scoreDoc.Doc);
+                //    string value = doc.Get(IndexingClass.FieldABSTRACT).ToString();
+                //    Console.WriteLine("Rank: " + rank + ", Doc_idx: " + scoreDoc.Doc + ", text: " + value + ", relevance score: " + scoreDoc.Score);
+                //    Console.WriteLine(searcher.Explain(query, scoreDoc.Doc));
+                //}
+                /////
+                /////
+
+                return results;
+            }
         }
 
-        // Create final query for display * still need to improve
-        public string CreateFinalQueryForDisplay(Query query, bool phraseState)
+        // Create final query for display
+        public string CreateFinalQuery(Query query, bool phraseState)
         {
-            finalQuery = null;
+            finalQueryDisplay = null;
 
             // if user selects phrase option 
             if (phraseState)
@@ -97,35 +149,71 @@ namespace SearchEngine
                 // if it is multiple term phrase (Information needs: "Information retrieval")
                 if (query.ToString().Contains("\""))
                 {
-                    finalQuery = query.ToString().Split(new[] { '\"' })[1];
-                    return finalQuery;
+                    finalQueryDisplay = query.ToString().Split(new[] { '\"' })[1];
+                    return finalQueryDisplay;
                 }
 
                 // if it is single term but using phrase option (Information needs: "Information")
                 else
                 {
-                    finalQuery = query.ToString().Split(new[] { ':', ' ' })[1];
-                    return finalQuery;
+                    finalQueryDisplay = query.ToString().Split(new[] { ':', ' ' })[1];
+                    return finalQueryDisplay;
                 }
             }
 
             // if user does ont select phrase option
             else
             {
+                // Extract terms from query created by query parser
                 ISet<Term> termSet = new HashSet<Term>();
                 query.ExtractTerms(termSet);
-                List<string> queryTokenList = new List<string>();
+                finalQueryTokenList = new List<string>();
+
+                // Process the query and remove repeated one
                 foreach (var value in termSet)
                 {
                     string queryToken = value.ToString().Split(new[] { ':' })[1];
-                    if (!queryTokenList.Contains(queryToken))
-                        queryTokenList.Add(queryToken);
+                    if (!finalQueryTokenList.Contains(queryToken))
+                        finalQueryTokenList.Add(queryToken);
                 }
 
-                finalQuery = string.Join(", ", queryTokenList.ToArray());
-                return finalQuery;
+                finalQueryDisplay = string.Join(", ", finalQueryTokenList.ToArray());
+                return finalQueryDisplay;
             }
         }
+
+        // Perform Query Expansion
+        public string[] QueryExpansion(string finalQueryToken)
+        {     
+            // Get SynSetlist
+            var synSetList = MainSearchForm.wordNet.GetSynSets(finalQueryToken);
+
+            //if (synSetList.Count == 0)
+            //    Console.WriteLine($"No synset found for {finalQueryToken}");
+
+            // Remove repeatedness of words 
+            List<string> synWordList = new List<string>();
+            foreach (var synSet in synSetList)
+            {
+                foreach (var synSetWord in synSet.Words)
+                {                  
+                    if (!synWordList.Contains(synSetWord))
+                        synWordList.Add(synSetWord);
+                } 
+            }
+
+            // Process the SynSetwords and add it to a new list
+            List<string> newSynWordList = new List<string>();
+            foreach (var synWord in synWordList)
+            {
+                if (synWord.Contains("_"))
+                    newSynWordList.Add("\"" + synWord.Replace('_', ' ') + "\"");
+                else
+                    newSynWordList.Add(synWord);
+            }
+            return newSynWordList.ToArray();
+        }
+       
 
         // The method that dispose the searcher
         public void ClearnUpSearcher()
