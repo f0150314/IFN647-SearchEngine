@@ -20,6 +20,7 @@ namespace SearchEngine
         IndexSearcher searcher;
         MultiFieldQueryParser multi_field_query_parser;
         List<string> finalQueryTokenList;
+        List<string> finalExpandedQueryList = new List<string>();
         public static string finalQueryDisplay;
         const Lucene.Net.Util.Version VERSION = Lucene.Net.Util.Version.LUCENE_30;
 
@@ -56,33 +57,15 @@ namespace SearchEngine
             if (wordNetSelection && MainSearchForm.wordNet.IsLoaded && !phraseState)
             {
                 // final query -> wordnet  (ignore phrase because wordnet do not accpet phrase input)
-                string[] expandedQueryArray = null;
                 foreach (var finalQueryToken in finalQueryTokenList)
                 {
-                    expandedQueryArray = QueryExpansion(finalQueryToken);
+                    QueryExpansion(finalQueryToken);
                 }
 
                 // if wordnet does not produce any query
-                if (expandedQueryArray.Length == 0)
+                if (finalExpandedQueryList.Count == 0)
                 {
                     TopDocs results = searcher.Search(query, top_n);
-
-                    ///// <summary>
-                    ///// This section provides explanation for the similarity output, 
-                    ///// delete this after determining the final similarity measures.
-                    ///// <summary>
-                    //int rank = 0;
-                    //foreach (ScoreDoc scoreDoc in results.ScoreDocs)
-                    //{
-                    //    rank++;
-                    //    Document doc = searcher.Doc(scoreDoc.Doc);
-                    //    string value = doc.Get(IndexingClass.FieldABSTRACT).ToString();
-                    //    Console.WriteLine("Rank: " + rank + ", Doc_idx: " + scoreDoc.Doc + ", text: " + value + ", relevance score: " + scoreDoc.Score);
-                    //    Console.WriteLine(searcher.Explain(query, scoreDoc.Doc));
-                    //}
-                    /////
-                    /////
-
                     return results;
                 }
 
@@ -90,8 +73,8 @@ namespace SearchEngine
                 else
                 {
                     // Create expanded query for searching
-                    string expandedQueryConcatenation = string.Join(" ", expandedQueryArray);
-                    //Console.WriteLine(expandedQueryConcatenation);
+                    string expandedQueryConcatenation = string.Join(" ", finalExpandedQueryList);
+                    Console.WriteLine(expandedQueryConcatenation);
                     Query expandedQuery = multi_field_query_parser.Parse(expandedQueryConcatenation);
                     TopDocs results = searcher.Search(expandedQuery, top_n);
 
@@ -111,29 +94,13 @@ namespace SearchEngine
                     /////
                     /////
 
+                    finalExpandedQueryList.Clear();
                     return results;
                 }
             }
             else
             {
                 TopDocs results = searcher.Search(query, top_n);
-
-                ///// <summary>
-                ///// This section provides explanation for the similarity output, 
-                ///// delete this after determining the final similarity measures.
-                ///// <summary>
-                //int rank = 0;
-                //foreach (ScoreDoc scoreDoc in results.ScoreDocs)
-                //{
-                //    rank++;
-                //    Document doc = searcher.Doc(scoreDoc.Doc);
-                //    string value = doc.Get(IndexingClass.FieldABSTRACT).ToString();
-                //    Console.WriteLine("Rank: " + rank + ", Doc_idx: " + scoreDoc.Doc + ", text: " + value + ", relevance score: " + scoreDoc.Score);
-                //    Console.WriteLine(searcher.Explain(query, scoreDoc.Doc));
-                //}
-                /////
-                /////
-
                 return results;
             }
         }
@@ -183,13 +150,10 @@ namespace SearchEngine
         }
 
         // Perform Query Expansion
-        public string[] QueryExpansion(string finalQueryToken)
+        public void QueryExpansion(string finalQueryToken)
         {     
             // Get SynSetlist
             var synSetList = MainSearchForm.wordNet.GetSynSets(finalQueryToken);
-
-            //if (synSetList.Count == 0)
-            //    Console.WriteLine($"No synset found for {finalQueryToken}");
 
             // Remove repeatedness of words 
             List<string> synWordList = new List<string>();
@@ -202,16 +166,14 @@ namespace SearchEngine
                 } 
             }
 
-            // Process the SynSetwords and add it to a new list
-            List<string> newSynWordList = new List<string>();
+            // Process the SynSetwords and add it to a finalExpandedQueryList
             foreach (var synWord in synWordList)
             {
                 if (synWord.Contains("_"))
-                    newSynWordList.Add("\"" + synWord.Replace('_', ' ') + "\"");
+                    finalExpandedQueryList.Add("\"" + synWord.Replace('_', ' ') + "\"");
                 else
-                    newSynWordList.Add(synWord);
+                    finalExpandedQueryList.Add(synWord);
             }
-            return newSynWordList.ToArray();
         }
        
 
