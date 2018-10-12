@@ -172,10 +172,15 @@ namespace SearchEngine
                 if (synWord.Contains("_"))
                     finalExpandedQueryList.Add("\"" + synWord.Replace('_', ' ') + "\"");
                 else
-                    finalExpandedQueryList.Add(synWord);
+                {
+                    // Add weighting to expanded queries if they are identical to final queries  
+                    if (finalQueryTokenList.Contains(synWord))
+                        finalExpandedQueryList.Add(synWord + "^5");
+                    else
+                        finalExpandedQueryList.Add(synWord);
+                }
             }
-        }
-       
+        }      
 
         // The method that dispose the searcher
         public void ClearnUpSearcher()
