@@ -53,13 +53,22 @@ namespace SearchEngine
             // Query query ->  final query
             finalQueryDisplay = CreateFinalQuery(query, phraseState);
 
-            // If wordNet option is selected and wordnet database is loaded and not phrase
-            if (wordNetSelection && MainSearchForm.wordNet.IsLoaded && !phraseState)
+            // If wordNet option is selected and wordnet database is loaded
+            if (wordNetSelection && MainSearchForm.wordNet.IsLoaded)
             {
-                // final query -> wordnet  (ignore phrase because wordnet do not accpet phrase input)
-                foreach (var finalQueryToken in finalQueryTokenList)
+                // final query -> wordnet (not phrase)
+                if (!phraseState)
                 {
-                    QueryExpansion(finalQueryToken);
+                    foreach (var finalQueryToken in finalQueryTokenList)
+                    {
+                        QueryExpansion(finalQueryToken);
+                    }
+                }
+
+                // final query -> wordnet (phrase)
+                else
+                {
+                    QueryExpansion(finalQueryDisplay);
                 }
 
                 // if wordnet does not produce any query

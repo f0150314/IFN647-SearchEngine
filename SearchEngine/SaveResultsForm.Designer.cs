@@ -47,12 +47,12 @@
             // 
             this.topicEnter.Location = new System.Drawing.Point(83, 28);
             this.topicEnter.Name = "topicEnter";
-            this.topicEnter.Size = new System.Drawing.Size(114, 20);
+            this.topicEnter.Size = new System.Drawing.Size(122, 20);
             this.topicEnter.TabIndex = 4;
             // 
             // SaveDocumentButton
             // 
-            this.SaveDocumentButton.Location = new System.Drawing.Point(211, 26);
+            this.SaveDocumentButton.Location = new System.Drawing.Point(223, 26);
             this.SaveDocumentButton.Name = "SaveDocumentButton";
             this.SaveDocumentButton.Size = new System.Drawing.Size(83, 23);
             this.SaveDocumentButton.TabIndex = 5;
@@ -60,16 +60,16 @@
             this.SaveDocumentButton.UseVisualStyleBackColor = true;
             this.SaveDocumentButton.Click += new System.EventHandler(this.SaveDocumentButton_Click);
             // 
-            // SaveDocumentWindow
+            // SaveResultsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(306, 73);
+            this.ClientSize = new System.Drawing.Size(318, 73);
             this.Controls.Add(this.SaveDocumentButton);
             this.Controls.Add(this.topicEnter);
             this.Controls.Add(this.label1);
-            this.Name = "SaveDocumentWindow";
-            this.Text = "Please specify topic identification";
+            this.Name = "SaveResultsForm";
+            this.Text = "Please specify topic ID";
             this.ResumeLayout(false);
             this.PerformLayout();
 
