@@ -124,6 +124,12 @@ namespace SearchEngine
             }
         }
 
+        private void StemCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (StemCheckBox.Checked)
+                MessageBox.Show("Note: Query expansion cannot be applied to stemming");
+        }
+
         private void SubmitButton_Click(object sender, EventArgs e)
         {
             // Check if the both paths are selected before indexing
@@ -142,14 +148,20 @@ namespace SearchEngine
 
                 // Record indexing time
                 stopwatch.Restart();
-                indexing.OpenIndex(DirectoryPathLabel.Text, StemmingCheckBox.Checked);
+                indexing.OpenIndex(DirectoryPathLabel.Text, StemCheckBox.Checked);
                 indexing.WalkDirectoryTree(SourceCollectionPathLabel.Text);
                 stopwatch.Stop();
 
                 // Clean up indexer
                 indexing.CleanUpIndexer();
-                MessageBox.Show($"Indexing time: {stopwatch.Elapsed.ToString()} seconds");
+                MessageBox.Show($"Indexing time: {stopwatch.Elapsed.ToString()} seconds", "Indexing Time");
                 indexingState = true;
+
+                // Notify user which analyzer they are currently using
+                if (indexingState && StemCheckBox.Checked)
+                    AnalyzseLabel.Text = "Analyzer: Snowball Analyzer (Stemming)";
+                else if (indexingState && !StemCheckBox.Checked)
+                    AnalyzseLabel.Text = "Analyzer: Standard Analyzer";
             }
             else
                 MessageBox.Show("You need to do select both indexing and collection paths before start indexing");
@@ -159,7 +171,7 @@ namespace SearchEngine
         {
             if (QueryExpansionCheckBox.Checked && !wordNet.IsLoaded)
             {
-                MessageBox.Show("Don't forget to load wordnet database");
+                MessageBox.Show("Please load wordnet database");
                 LoadDatabaseButton.Enabled = true;
             }
             else
@@ -196,7 +208,7 @@ namespace SearchEngine
                     // Search the query against the index, the default return size is set to be 30
                     // retrieve the searching result TopDocs object
                     stopwatch.Restart();             
-                    results = searching.SearchIndex(IndexingClass.luceneIndexDirectory, IndexingClass.analyzer, inputQuery, PhraseFormCheckbox.Checked, QueryExpansionCheckBox.Checked);
+                    results = searching.SearchIndex(IndexingClass.luceneIndexDirectory, IndexingClass.analyzer, inputQuery, PhraseFormCheckbox.Checked, StemCheckBox.Checked,  QueryExpansionCheckBox.Checked);
                     stopwatch.Stop();
 
                     // Display Searching info                   
@@ -392,7 +404,7 @@ namespace SearchEngine
                     {
                         int rank = 0; 
                         searching = new SearchingClass();
-                        TopDocs infoResults = searching.SearchIndex(IndexingClass.luceneIndexDirectory, IndexingClass.analyzer, infoNeed, PhraseFormCheckbox.Checked, QueryExpansionCheckBox.Checked);
+                        TopDocs infoResults = searching.SearchIndex(IndexingClass.luceneIndexDirectory, IndexingClass.analyzer, infoNeed, PhraseFormCheckbox.Checked, StemCheckBox.Checked, QueryExpansionCheckBox.Checked);
                         searching.ClearnUpSearcher();
 
                         // Check whether the specified file is already exists or not
@@ -438,6 +450,6 @@ namespace SearchEngine
             }
             else
                 MessageBox.Show("You need to do indexing before seaching");
-        }       
+        }
     }
 }

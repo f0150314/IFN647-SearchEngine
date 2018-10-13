@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Diagnostics;
 using Lucene.Net.Analysis;
 using Lucene.Net.Documents;
@@ -10,7 +7,7 @@ using Lucene.Net.Index;
 using Lucene.Net.Store;
 using Lucene.Net.Search;
 using Lucene.Net.QueryParsers;
-using Syn.WordNet;
+using Lucene.Net.Search.Highlight;
 
 namespace SearchEngine
 {
@@ -18,9 +15,7 @@ namespace SearchEngine
     {
         // Initialize class variables
         IndexSearcher searcher;
-        MultiFieldQueryParser multi_field_query_parser;
-        List<string> finalQueryTokenList;
-        List<string> finalExpandedQueryList = new List<string>();
+        MultiFieldQueryParser multi_field_query_parser;     
         public static string finalQueryDisplay;
         const Lucene.Net.Util.Version VERSION = Lucene.Net.Util.Version.LUCENE_30;
 
@@ -30,7 +25,7 @@ namespace SearchEngine
         }
 
         // Search Index
-        public TopDocs SearchIndex(Directory luceneIndexDirectory, Analyzer analyzer, string queryText, bool phraseState, bool wordNetSelection,int top_n = 500)
+        public TopDocs SearchIndex(Directory luceneIndexDirectory, Analyzer analyzer, string queryText, bool phraseState, bool stemState, bool wordNetSelection,int top_n = 500)
         {
             // Initialize Searcher and Writer and set similarity
             searcher = new IndexSearcher(luceneIndexDirectory);
@@ -48,29 +43,19 @@ namespace SearchEngine
             multi_field_query_parser = new MultiFieldQueryParser(VERSION, new string [] { IndexingClass.FieldTITLE, IndexingClass.FieldAUTHOR, IndexingClass.FieldBIBLIO_INFO, IndexingClass.FieldABSTRACT}, analyzer);
 
             // User information needs -> Query query
-            Query query = multi_field_query_parser.Parse(queryText.ToLower());
+            Query query = multi_field_query_parser.Parse(queryText.ToLower());           
+            Console.WriteLine(query);
 
-            // Query query ->  final query
-            finalQueryDisplay = CreateFinalQuery(query, phraseState);
-
+            // Query query ->  final query for display and Term list for query expansion
+            List<string> termList = new List<string>(); ;            
+            finalQueryDisplay = CreateFinalQuery(query, termList, phraseState);
+         
             // If wordNet option is selected and wordnet database is loaded
-            if (wordNetSelection && MainSearchForm.wordNet.IsLoaded)
+            if (wordNetSelection && MainSearchForm.wordNet.IsLoaded && !stemState)
             {
-                // final query -> wordnet (not phrase)
-                if (!phraseState)
-                {
-                    foreach (var finalQueryToken in finalQueryTokenList)
-                    {
-                        QueryExpansion(finalQueryToken);
-                    }
-                }
-
-                // final query -> wordnet (phrase)
-                else
-                {
-                    QueryExpansion(finalQueryDisplay);
-                }
-
+                List<string> finalExpandedQueryList = new List<string>();
+                QueryExpansion(finalExpandedQueryList, termList, phraseState);
+               
                 // if wordnet does not produce any query
                 if (finalExpandedQueryList.Count == 0)
                 {
@@ -103,7 +88,6 @@ namespace SearchEngine
                     /////
                     /////
 
-                    finalExpandedQueryList.Clear();
                     return results;
                 }
             }
@@ -115,81 +99,99 @@ namespace SearchEngine
         }
 
         // Create final query for display
-        public string CreateFinalQuery(Query query, bool phraseState)
+        public string CreateFinalQuery(Query query, List<string> termList, bool phraseState)
         {
             finalQueryDisplay = null;
 
-            // if user selects phrase option 
-            if (phraseState)
+            // Get terms from query
+            var allTerms = QueryTermExtractor.GetTerms(query);
+            foreach (var value in allTerms)
             {
-                // if it is multiple term phrase (Information needs: "Information retrieval")
-                if (query.ToString().Contains("\""))
-                {
-                    finalQueryDisplay = query.ToString().Split(new[] { '\"' })[1];
-                    return finalQueryDisplay;
-                }
-
-                // if it is single term but using phrase option (Information needs: "Information")
-                else
-                {
-                    finalQueryDisplay = query.ToString().Split(new[] { ':', ' ' })[1];
-                    return finalQueryDisplay;
-                }
+                if (!termList.Contains(value.Term))
+                    termList.Add(value.Term);
             }
 
+            // if user selects phrase option 
+            if (phraseState)
+            {               
+                finalQueryDisplay = "\"" + string.Join(" ", termList) + "\"";
+                return finalQueryDisplay;
+            }
             // if user does ont select phrase option
             else
             {
-                // Extract terms from query created by query parser
-                ISet<Term> termSet = new HashSet<Term>();
-                query.ExtractTerms(termSet);
-                finalQueryTokenList = new List<string>();
-
-                // Process the query and remove repeated one
-                foreach (var value in termSet)
-                {
-                    string queryToken = value.ToString().Split(new[] { ':' })[1];
-                    if (!finalQueryTokenList.Contains(queryToken))
-                        finalQueryTokenList.Add(queryToken);
-                }
-
-                finalQueryDisplay = string.Join(", ", finalQueryTokenList.ToArray());
+                finalQueryDisplay = string.Join(", ", termList);
                 return finalQueryDisplay;
             }
         }
 
         // Perform Query Expansion
-        public void QueryExpansion(string finalQueryToken)
-        {     
-            // Get SynSetlist
-            var synSetList = MainSearchForm.wordNet.GetSynSets(finalQueryToken);
-
-            // Remove repeatedness of words 
-            List<string> synWordList = new List<string>();
-            foreach (var synSet in synSetList)
+        public void QueryExpansion(List<string> finalExpandedQueryList, List<string> termList, bool phraseState)
+        {
+            // final query -> wordnet (not phrase)
+            if (!phraseState)
             {
-                foreach (var synSetWord in synSet.Words)
+                // Get SynSetlist
+                List<string> synWordList = new List<string>();
+                foreach (var term in termList)
                 {                  
-                    if (!synWordList.Contains(synSetWord))
-                        synWordList.Add(synSetWord);
-                } 
+                    foreach (var synSet in MainSearchForm.wordNet.GetSynSets(term))
+                    {
+                        foreach (var synSetWord in synSet.Words)
+                        {
+                            if (!synWordList.Contains(synSetWord))
+                                synWordList.Add(synSetWord);
+                        }
+                    }
+                }
+                // Process the SynSetwords and add it to a finalExpandedQueryList
+                foreach (var synWord in synWordList)
+                {
+                    if (synWord.Contains("_"))
+                        finalExpandedQueryList.Add("\"" + synWord.Replace('_', ' ') + "\"");
+                    else
+                    {
+                        // Add weighting to expanded queries if they are identical to final queries  
+                        if (termList.Contains(synWord))
+                            finalExpandedQueryList.Add(synWord + "^5");
+                        else
+                            finalExpandedQueryList.Add(synWord);
+                    }
+                }
             }
 
-            // Process the SynSetwords and add it to a finalExpandedQueryList
-            foreach (var synWord in synWordList)
+            // final query -> wordnet (phrase)
+            else
             {
-                if (synWord.Contains("_"))
-                    finalExpandedQueryList.Add("\"" + synWord.Replace('_', ' ') + "\"");
-                else
+                // Get phrase
+                string phrase = string.Join(" ", termList);
+
+                // Get SynSetlist
+                List<string> synWordList = new List<string>();
+                foreach (var synSet in MainSearchForm.wordNet.GetSynSets(phrase))
                 {
-                    // Add weighting to expanded queries if they are identical to final queries  
-                    if (finalQueryTokenList.Contains(synWord))
-                        finalExpandedQueryList.Add(synWord + "^5");
+                    foreach (var synSetWord in synSet.Words)
+                    {
+                        if (!synWordList.Contains(synSetWord))
+                            synWordList.Add(synSetWord);
+                    }
+                }
+                // Process the SynSetwords and add it to a finalExpandedQueryList
+                foreach (var synWord in synWordList)
+                {
+                    if (synWord.Contains("_"))
+                    {
+                        // Add weighting to expanded queries if they are identical to final phrase  
+                        if (synWord.Replace('_', ' ') == phrase)
+                            finalExpandedQueryList.Add("\"" + synWord.Replace('_', ' ') + "\"^5");
+                        else
+                            finalExpandedQueryList.Add("\"" + synWord.Replace('_', ' ') + "\"");
+                    }
                     else
                         finalExpandedQueryList.Add(synWord);
                 }
-            }
-        }      
+            }            
+        }     
 
         // The method that dispose the searcher
         public void ClearnUpSearcher()

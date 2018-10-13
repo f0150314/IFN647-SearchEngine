@@ -46,7 +46,7 @@
             this.BibliBoostCheckBox = new System.Windows.Forms.CheckBox();
             this.AuthorBoostCheckBox = new System.Windows.Forms.CheckBox();
             this.TitleBoostCheckBox = new System.Windows.Forms.CheckBox();
-            this.StemmingCheckBox = new System.Windows.Forms.CheckBox();
+            this.StemCheckBox = new System.Windows.Forms.CheckBox();
             this.DirectoryPathLabel = new System.Windows.Forms.Label();
             this.SourceCollectionPathLabel = new System.Windows.Forms.Label();
             this.BuildIndexButton = new System.Windows.Forms.Button();
@@ -63,6 +63,7 @@
             this.folderBuildIndexDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.folderCollectionDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.saveInfoDialog = new System.Windows.Forms.SaveFileDialog();
+            this.AnalyzseLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.SearchedResultView)).BeginInit();
             this.IndexingBox.SuspendLayout();
             this.BoostingBox.SuspendLayout();
@@ -173,8 +174,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.IndexingBox.AutoSize = true;
             this.IndexingBox.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.IndexingBox.Controls.Add(this.AnalyzseLabel);
             this.IndexingBox.Controls.Add(this.BoostingBox);
-            this.IndexingBox.Controls.Add(this.StemmingCheckBox);
+            this.IndexingBox.Controls.Add(this.StemCheckBox);
             this.IndexingBox.Controls.Add(this.DirectoryPathLabel);
             this.IndexingBox.Controls.Add(this.SourceCollectionPathLabel);
             this.IndexingBox.Controls.Add(this.BuildIndexButton);
@@ -183,7 +185,7 @@
             this.IndexingBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.IndexingBox.Location = new System.Drawing.Point(0, 0);
             this.IndexingBox.Name = "IndexingBox";
-            this.IndexingBox.Size = new System.Drawing.Size(431, 236);
+            this.IndexingBox.Size = new System.Drawing.Size(446, 236);
             this.IndexingBox.TabIndex = 12;
             this.IndexingBox.TabStop = false;
             this.IndexingBox.Text = "Indexing";
@@ -273,14 +275,15 @@
             this.TitleBoostCheckBox.Text = "Title";
             this.TitleBoostCheckBox.CheckedChanged += new System.EventHandler(this.TitleBoostCheckBox_CheckedChanged);
             // 
-            // StemmingCheckBox
+            // StemCheckBox
             // 
-            this.StemmingCheckBox.AutoSize = true;
-            this.StemmingCheckBox.Location = new System.Drawing.Point(239, 127);
-            this.StemmingCheckBox.Name = "StemmingCheckBox";
-            this.StemmingCheckBox.Size = new System.Drawing.Size(163, 17);
-            this.StemmingCheckBox.TabIndex = 13;
-            this.StemmingCheckBox.Text = "Snallball Analyzer (Stemming)";
+            this.StemCheckBox.AutoSize = true;
+            this.StemCheckBox.Location = new System.Drawing.Point(248, 117);
+            this.StemCheckBox.Name = "StemCheckBox";
+            this.StemCheckBox.Size = new System.Drawing.Size(163, 17);
+            this.StemCheckBox.TabIndex = 13;
+            this.StemCheckBox.Text = "Snallball Analyzer (Stemming)";
+            this.StemCheckBox.CheckedChanged += new System.EventHandler(this.StemCheckBox_CheckedChanged);
             // 
             // DirectoryPathLabel
             // 
@@ -313,7 +316,7 @@
             // SubmitButton
             // 
             this.SubmitButton.AutoSize = true;
-            this.SubmitButton.Location = new System.Drawing.Point(267, 173);
+            this.SubmitButton.Location = new System.Drawing.Point(265, 140);
             this.SubmitButton.Name = "SubmitButton";
             this.SubmitButton.Size = new System.Drawing.Size(101, 44);
             this.SubmitButton.TabIndex = 17;
@@ -347,9 +350,9 @@
             this.SearchingBox.Controls.Add(this.FinalQueryLabel);
             this.SearchingBox.Controls.Add(this.SearchingTimeLabel);
             this.SearchingBox.Controls.Add(this.TotalHitsLabel);
-            this.SearchingBox.Location = new System.Drawing.Point(430, 0);
+            this.SearchingBox.Location = new System.Drawing.Point(443, 0);
             this.SearchingBox.Name = "SearchingBox";
-            this.SearchingBox.Size = new System.Drawing.Size(500, 236);
+            this.SearchingBox.Size = new System.Drawing.Size(487, 236);
             this.SearchingBox.TabIndex = 13;
             this.SearchingBox.TabStop = false;
             this.SearchingBox.Text = "Searching";
@@ -377,7 +380,7 @@
             // 
             // AutoParsing
             // 
-            this.AutoParsing.Location = new System.Drawing.Point(322, 159);
+            this.AutoParsing.Location = new System.Drawing.Point(309, 157);
             this.AutoParsing.Name = "AutoParsing";
             this.AutoParsing.Size = new System.Drawing.Size(166, 58);
             this.AutoParsing.TabIndex = 14;
@@ -398,7 +401,7 @@
             // 
             this.SearchButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.SearchButton.AutoSize = true;
-            this.SearchButton.Location = new System.Drawing.Point(397, 23);
+            this.SearchButton.Location = new System.Drawing.Point(398, 23);
             this.SearchButton.Name = "SearchButton";
             this.SearchButton.Size = new System.Drawing.Size(77, 23);
             this.SearchButton.TabIndex = 8;
@@ -412,7 +415,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.QueryEnter.Location = new System.Drawing.Point(116, 25);
             this.QueryEnter.Name = "QueryEnter";
-            this.QueryEnter.Size = new System.Drawing.Size(260, 20);
+            this.QueryEnter.Size = new System.Drawing.Size(275, 20);
             this.QueryEnter.TabIndex = 7;
             // 
             // RawQueryLabel
@@ -425,6 +428,15 @@
             this.RawQueryLabel.Size = new System.Drawing.Size(92, 13);
             this.RawQueryLabel.TabIndex = 6;
             this.RawQueryLabel.Text = "Information need: ";
+            // 
+            // AnalyzseLabel
+            // 
+            this.AnalyzseLabel.AutoSize = true;
+            this.AnalyzseLabel.Location = new System.Drawing.Point(246, 197);
+            this.AnalyzseLabel.Name = "AnalyzseLabel";
+            this.AnalyzseLabel.Size = new System.Drawing.Size(137, 13);
+            this.AnalyzseLabel.TabIndex = 20;
+            this.AnalyzseLabel.Text = "Analyzer State: No analyzer";
             // 
             // MainSearchForm
             // 
@@ -463,7 +475,7 @@
         private System.Windows.Forms.Button PreviousButton;
         private System.Windows.Forms.Button NextButton;
         private System.Windows.Forms.GroupBox IndexingBox;
-        private System.Windows.Forms.CheckBox StemmingCheckBox;
+        private System.Windows.Forms.CheckBox StemCheckBox;
         private System.Windows.Forms.Label DirectoryPathLabel;
         private System.Windows.Forms.Label SourceCollectionPathLabel;
         private System.Windows.Forms.Button BuildIndexButton;
@@ -489,5 +501,6 @@
         private System.Windows.Forms.CheckBox TitleBoostCheckBox;
         private System.Windows.Forms.CheckBox QueryExpansionCheckBox;
         private System.Windows.Forms.Button LoadDatabaseButton;
+        private System.Windows.Forms.Label AnalyzseLabel;
     }
 }
