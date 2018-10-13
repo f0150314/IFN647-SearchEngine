@@ -124,4 +124,28 @@
   <data name="StopwordList" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\StopwordList.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
+  <data name="data" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\data.adj;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="data1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\data.adv;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="data2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\data.noun;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="data3" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\data.verb;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="index" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\index.adj;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="index1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\index.adv;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="index2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\index.noun;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="index3" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\index.verb;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
 </root>

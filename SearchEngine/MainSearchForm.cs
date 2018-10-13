@@ -169,7 +169,7 @@ namespace SearchEngine
         // Load wordnet data
         private void LoadDatabaseButton_Click(object sender, EventArgs e)
         {
-            string directoryPath = Directory.GetCurrentDirectory();
+            string directoryPath = Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName, "Resources");
             MessageBox.Show("Loading database");
             wordNet.LoadFromDirectory(directoryPath);
             MessageBox.Show("Load completed");

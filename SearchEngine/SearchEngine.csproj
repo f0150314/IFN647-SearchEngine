@@ -154,6 +154,14 @@
     <None Include="Resources\cran_information_needs.txt" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\data.adj" />
+    <None Include="Resources\data.adv" />
+    <None Include="Resources\data.noun" />
+    <None Include="Resources\data.verb" />
+    <None Include="Resources\index.adj" />
+    <None Include="Resources\index.adv" />
+    <None Include="Resources\index.noun" />
+    <None Include="Resources\index.verb" />
     <None Include="Resources\StopwordList.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
