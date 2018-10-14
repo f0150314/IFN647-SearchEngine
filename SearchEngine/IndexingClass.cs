@@ -36,10 +36,8 @@ namespace SearchEngine
         // Create stopwords list
         public ISet<string> Stopwords()
         {
-            List<string> stopwordList = new List<string>();
-            char[] delimiters = { '\t', ' ', '\n' };
-            stopwordList = Resource.StopwordList.Split(delimiters, StringSplitOptions.RemoveEmptyEntries).ToList();
-            ISet<string> stopwordSet = new HashSet<string>(stopwordList);
+            char[] delimiters = { '\t', ' ', '\r', '\n' };
+            ISet<string> stopwordSet = new HashSet<string>(Resource.StopwordList.Split(delimiters, StringSplitOptions.RemoveEmptyEntries).ToList());
             return stopwordSet;
         }
 
