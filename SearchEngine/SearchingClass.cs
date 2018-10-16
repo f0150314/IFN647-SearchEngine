@@ -60,6 +60,17 @@ namespace SearchEngine
                 if (finalExpandedQueryList.Count == 0)
                 {
                     TopDocs results = searcher.Search(query, top_n);
+
+                    int rank = 0;
+                    foreach (ScoreDoc scoreDoc in results.ScoreDocs)
+                    {
+                        rank++;
+                        Document doc = searcher.Doc(scoreDoc.Doc);
+                        string value = doc.Get(IndexingClass.FieldABSTRACT).ToString();
+                        Console.WriteLine("Rank: " + rank + ", Doc_idx: " + scoreDoc.Doc + ", text: " + value + ", relevance score: " + scoreDoc.Score);
+                        Console.WriteLine(searcher.Explain(query, scoreDoc.Doc));
+                    }
+
                     return results;
                 }
 
@@ -72,21 +83,21 @@ namespace SearchEngine
                     Query expandedQuery = multi_field_query_parser.Parse(expandedQueryConcatenation);
                     TopDocs results = searcher.Search(expandedQuery, top_n);
 
-                    ///// <summary>
-                    ///// This section provides explanation for the similarity output, 
-                    ///// delete this after determining the final similarity measures.
-                    ///// <summary>
-                    //int rank = 0;
-                    //foreach (ScoreDoc scoreDoc in results.ScoreDocs)
-                    //{
-                    //    rank++;
-                    //    Document doc = searcher.Doc(scoreDoc.Doc);
-                    //    string value = doc.Get(IndexingClass.FieldABSTRACT).ToString();
-                    //    Console.WriteLine("Rank: " + rank + ", Doc_idx: " + scoreDoc.Doc + ", text: " + value + ", relevance score: " + scoreDoc.Score);
-                    //    Console.WriteLine(searcher.Explain(expandedQuery, scoreDoc.Doc));
-                    //}
-                    /////
-                    /////
+                    /// <summary>
+                    /// This section provides explanation for the similarity output, 
+                    /// delete this after determining the final similarity measures.
+                    /// <summary>
+                    int rank = 0;
+                    foreach (ScoreDoc scoreDoc in results.ScoreDocs)
+                    {
+                        rank++;
+                        Document doc = searcher.Doc(scoreDoc.Doc);
+                        string value = doc.Get(IndexingClass.FieldABSTRACT).ToString();
+                        Console.WriteLine("Rank: " + rank + ", Doc_idx: " + scoreDoc.Doc + ", text: " + value + ", relevance score: " + scoreDoc.Score);
+                        Console.WriteLine(searcher.Explain(expandedQuery, scoreDoc.Doc));
+                    }
+                    ///
+                    ///
 
                     return results;
                 }
@@ -94,6 +105,17 @@ namespace SearchEngine
             else
             {
                 TopDocs results = searcher.Search(query, top_n);
+
+                //int rank = 0;
+                //foreach (ScoreDoc scoreDoc in results.ScoreDocs)
+                //{
+                //    rank++;
+                //    Document doc = searcher.Doc(scoreDoc.Doc);
+                //    string value = doc.Get(IndexingClass.FieldABSTRACT).ToString();
+                //    Console.WriteLine("Rank: " + rank + ", Doc_idx: " + scoreDoc.Doc + ", text: " + value + ", relevance score: " + scoreDoc.Score);
+                //    Console.WriteLine(searcher.Explain(query, scoreDoc.Doc));
+                //}
+
                 return results;
             }
         }
