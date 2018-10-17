@@ -268,17 +268,11 @@ namespace SearchEngine
                   "Bibliography: " + docs[j].Get(IndexingClass.FieldBIBLIO_INFO).ToString() + "<Br/><Br/>" +
                   "Abstract: <Br/>" +
                   docs[j].Get(IndexingClass.FieldABSTRACT).ToString().Split(new[] { " ." }, StringSplitOptions.RemoveEmptyEntries).FirstOrDefault() + "<Br/><Br/><Br/><Br/>");
-
-
-
                 }
 
                 //WebBrowser1.DocumentText += "</body></html>";
                 webBrowser1.Document.Write("</body></html>");
                 this.webBrowser1.Refresh();
-
-
-
 
                 DataTable dt = new DataTable();
                 dt.Columns.Add("No.", typeof(int));
@@ -308,16 +302,10 @@ namespace SearchEngine
                     SearchedResultView.Columns[0].Width = 15;
                     SearchedResultView.Columns[1].Width = 150;
                     SearchedResultView.Columns[2].Width = 100;
-                    //SearchedResultView.Columns[0].Width = 30;
-                    //SearchedResultView.Columns[1].Width = 150;
-                    //SearchedResultView.Columns[2].Width = 100;
-                    //SearchedResultView.Columns[3].Width = 100;
                 }
             }
-
             if (displayBatch == results.TotalHits / 10)
             {
-
                 webBrowser1.Document.Write("<html><body><Br/>");
                 for (int i = displayBatch * 10; i < results.TotalHits; i++)
                 {
@@ -331,16 +319,8 @@ namespace SearchEngine
                     "Bibliography: " + docs[j].Get(IndexingClass.FieldBIBLIO_INFO).ToString() + "<Br/><Br/>" +
                     "Abstract: <Br/>" +
                     docs[j].Get(IndexingClass.FieldABSTRACT).ToString().Split(new[] { " ." }, StringSplitOptions.RemoveEmptyEntries).FirstOrDefault() + "<Br/><Br/><Br/><Br/>");
-
-
-
                 }
-
                 webBrowser1.Document.Write("</body></html>");
-
-
-
-
 
                 DataTable dt = new DataTable();
                 dt.Columns.Add("No.", typeof(int));
@@ -371,10 +351,6 @@ namespace SearchEngine
                     SearchedResultView.Columns[0].Width = 15;
                     SearchedResultView.Columns[1].Width = 150;
                     SearchedResultView.Columns[2].Width = 100;
-                    //SearchedResultView.Columns[0].Width = 30;
-                    //SearchedResultView.Columns[1].Width = 150;
-                    //SearchedResultView.Columns[2].Width = 100;
-                    //SearchedResultView.Columns[3].Width = 100;
                 }
             }
 
@@ -508,17 +484,7 @@ namespace SearchEngine
                 }
             }
             else
-                MessageBox.Show("You need to do indexing before seaching");
-        }
-
-        private void webBrowser1_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
-        {
-
-        }
-
-        private void MainSearchForm_Load(object sender, EventArgs e)
-        {
-
+                MessageBox.Show("You need to do indexing before generating the results");
         }
     }
 }

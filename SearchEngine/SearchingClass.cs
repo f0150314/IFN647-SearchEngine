@@ -43,8 +43,8 @@ namespace SearchEngine
             multi_field_query_parser = new MultiFieldQueryParser(VERSION, new string [] { IndexingClass.FieldTITLE, IndexingClass.FieldAUTHOR, IndexingClass.FieldBIBLIO_INFO, IndexingClass.FieldABSTRACT}, analyzer);
 
             // User information needs -> Query query
-            Query query = multi_field_query_parser.Parse(queryText.ToLower());           
-            Console.WriteLine(query);
+            Query query = multi_field_query_parser.Parse(queryText.ToLower());
+            Console.WriteLine(query);            
 
             // Query query ->  final query for display and Term list for query expansion
             List<string> termList = new List<string>(); ;            
@@ -60,17 +60,6 @@ namespace SearchEngine
                 if (finalExpandedQueryList.Count == 0)
                 {
                     TopDocs results = searcher.Search(query, top_n);
-
-                    int rank = 0;
-                    foreach (ScoreDoc scoreDoc in results.ScoreDocs)
-                    {
-                        rank++;
-                        Document doc = searcher.Doc(scoreDoc.Doc);
-                        string value = doc.Get(IndexingClass.FieldABSTRACT).ToString();
-                        Console.WriteLine("Rank: " + rank + ", Doc_idx: " + scoreDoc.Doc + ", text: " + value + ", relevance score: " + scoreDoc.Score);
-                        Console.WriteLine(searcher.Explain(query, scoreDoc.Doc));
-                    }
-
                     return results;
                 }
 
@@ -82,23 +71,6 @@ namespace SearchEngine
                     Console.WriteLine(expandedQueryConcatenation);
                     Query expandedQuery = multi_field_query_parser.Parse(expandedQueryConcatenation);
                     TopDocs results = searcher.Search(expandedQuery, top_n);
-
-                    /// <summary>
-                    /// This section provides explanation for the similarity output, 
-                    /// delete this after determining the final similarity measures.
-                    /// <summary>
-                    int rank = 0;
-                    foreach (ScoreDoc scoreDoc in results.ScoreDocs)
-                    {
-                        rank++;
-                        Document doc = searcher.Doc(scoreDoc.Doc);
-                        string value = doc.Get(IndexingClass.FieldABSTRACT).ToString();
-                        Console.WriteLine("Rank: " + rank + ", Doc_idx: " + scoreDoc.Doc + ", text: " + value + ", relevance score: " + scoreDoc.Score);
-                        Console.WriteLine(searcher.Explain(expandedQuery, scoreDoc.Doc));
-                    }
-                    ///
-                    ///
-
                     return results;
                 }
             }
@@ -106,6 +78,8 @@ namespace SearchEngine
             {
                 TopDocs results = searcher.Search(query, top_n);
 
+                /// This section provides explanation for the similarity output, 
+                /// delete this after determining the final similarity measures.
                 //int rank = 0;
                 //foreach (ScoreDoc scoreDoc in results.ScoreDocs)
                 //{
@@ -139,6 +113,7 @@ namespace SearchEngine
                 finalQueryDisplay = "\"" + string.Join(" ", termList) + "\"";
                 return finalQueryDisplay;
             }
+
             // if user does ont select phrase option
             else
             {
