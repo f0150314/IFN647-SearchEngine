@@ -15,8 +15,10 @@ namespace SearchEngine
     {
         // Initialize class variables
         IndexSearcher searcher;
-        MultiFieldQueryParser multi_field_query_parser;     
-        public static string finalQueryDisplay;
+        MultiFieldQueryParser multi_field_query_parser;
+        //public static string finalQueryDisplay;
+        public static List<string> queryList;
+        public static List<string> finalExpandedQueryList;
         const Lucene.Net.Util.Version VERSION = Lucene.Net.Util.Version.LUCENE_30;
 
         public SearchingClass()
@@ -43,18 +45,33 @@ namespace SearchEngine
             multi_field_query_parser = new MultiFieldQueryParser(VERSION, new string [] { IndexingClass.FieldTITLE, IndexingClass.FieldAUTHOR, IndexingClass.FieldBIBLIO_INFO, IndexingClass.FieldABSTRACT}, analyzer);
 
             // User information needs -> Query query
-            Query query = multi_field_query_parser.Parse(queryText.ToLower());
-            Console.WriteLine(query);            
+            BooleanQuery query = (BooleanQuery)multi_field_query_parser.Parse(queryText.ToLower());
+            Console.WriteLine(query);
 
-            // Query query ->  final query for display and Term list for query expansion
-            List<string> termList = new List<string>(); ;            
-            finalQueryDisplay = CreateFinalQuery(query, termList, phraseState);
+            queryList = new List<string>();
+            foreach (var queryClause in query.Clauses)
+            {
+                if (!queryClause.Query.ToString(IndexingClass.FieldTITLE).Split(new[] { " Author" }, StringSplitOptions.RemoveEmptyEntries)[0].Contains(":"))
+                {
+                    string parsedQuery = queryClause.Query.ToString(IndexingClass.FieldTITLE).Split(new[] { " Author" }, StringSplitOptions.None)[0];
+                    if (parsedQuery.Contains("\""))
+                    {
+                        Console.WriteLine(parsedQuery.Split(new[] { '"' })[1]);
+                        queryList.Add(parsedQuery.Split(new[] { '"' })[1]);
+                    }
+                    else
+                    {
+                        Console.WriteLine(parsedQuery);
+                        queryList.Add(parsedQuery);
+                    }
+                }
+            }
          
             // If wordNet option is selected and wordnet database is loaded
             if (wordNetSelection && MainSearchForm.wordNet.IsLoaded && !stemState)
             {
-                List<string> finalExpandedQueryList = new List<string>();
-                QueryExpansion(finalExpandedQueryList, termList, phraseState);
+                finalExpandedQueryList = new List<string>();
+                QueryExpansion(finalExpandedQueryList, queryList, phraseState);
                
                 // if wordnet does not produce any query
                 if (finalExpandedQueryList.Count == 0)
@@ -94,45 +111,17 @@ namespace SearchEngine
             }
         }
 
-        // Create final query for display
-        public string CreateFinalQuery(Query query, List<string> termList, bool phraseState)
-        {
-            finalQueryDisplay = null;
-
-            // Get terms from query
-            var allTerms = QueryTermExtractor.GetTerms(query);
-            foreach (var value in allTerms)
-            {
-                if (!termList.Contains(value.Term))
-                    termList.Add(value.Term);
-            }
-
-            // if user selects phrase option 
-            if (phraseState)
-            {               
-                finalQueryDisplay = "\"" + string.Join(" ", termList) + "\"";
-                return finalQueryDisplay;
-            }
-
-            // if user does ont select phrase option
-            else
-            {
-                finalQueryDisplay = string.Join(", ", termList);
-                return finalQueryDisplay;
-            }
-        }
-
         // Perform Query Expansion
-        public void QueryExpansion(List<string> finalExpandedQueryList, List<string> termList, bool phraseState)
+        public void QueryExpansion(List<string> finalExpandedQueryList, List<string> queryList, bool phraseState)
         {
             // final query -> wordnet (not phrase)
             if (!phraseState)
             {
                 // Get SynSetlist
                 List<string> synWordList = new List<string>();
-                foreach (var term in termList)
+                foreach (var eachQuery in queryList)
                 {                  
-                    foreach (var synSet in MainSearchForm.wordNet.GetSynSets(term))
+                    foreach (var synSet in MainSearchForm.wordNet.GetSynSets(eachQuery))
                     {
                         foreach (var synSetWord in synSet.Words)
                         {
@@ -145,11 +134,17 @@ namespace SearchEngine
                 foreach (var synWord in synWordList)
                 {
                     if (synWord.Contains("_"))
-                        finalExpandedQueryList.Add("\"" + synWord.Replace('_', ' ') + "\"");
+                    // Add weighting to expanded queries if they are identical to final queries  
+                    {
+                        if (queryList.Contains(synWord.Replace('_', ' ')))
+                            finalExpandedQueryList.Add("\"" + synWord.Replace('_', ' ') + "\"" + "^5");
+                        else
+                            finalExpandedQueryList.Add("\"" + synWord.Replace('_', ' ') + "\"");
+                    }
+                    // Add weighting to expanded queries if they are identical to final queries  
                     else
                     {
-                        // Add weighting to expanded queries if they are identical to final queries  
-                        if (termList.Contains(synWord))
+                        if (queryList.Contains(synWord))
                             finalExpandedQueryList.Add(synWord + "^5");
                         else
                             finalExpandedQueryList.Add(synWord);
@@ -161,12 +156,12 @@ namespace SearchEngine
             else
             {
                 // Get phrase
-                string phrase = string.Join(" ", termList);
+                string phrase = string.Join(" ", queryList);
 
                 // Get SynSetlist
                 List<string> synWordList = new List<string>();
                 foreach (var synSet in MainSearchForm.wordNet.GetSynSets(phrase))
-                {
+                {                    
                     foreach (var synSetWord in synSet.Words)
                     {
                         if (!synWordList.Contains(synSetWord))

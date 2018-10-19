@@ -76,8 +76,9 @@
             // FinalQueryLabel
             // 
             this.FinalQueryLabel.AutoSize = true;
-            this.FinalQueryLabel.Location = new System.Drawing.Point(29, 184);
+            this.FinalQueryLabel.Location = new System.Drawing.Point(29, 171);
             this.FinalQueryLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.FinalQueryLabel.MaximumSize = new System.Drawing.Size(450, 0);
             this.FinalQueryLabel.Name = "FinalQueryLabel";
             this.FinalQueryLabel.Size = new System.Drawing.Size(58, 13);
             this.FinalQueryLabel.TabIndex = 1;
@@ -86,7 +87,7 @@
             // SearchingTimeLabel
             // 
             this.SearchingTimeLabel.AutoSize = true;
-            this.SearchingTimeLabel.Location = new System.Drawing.Point(29, 140);
+            this.SearchingTimeLabel.Location = new System.Drawing.Point(29, 126);
             this.SearchingTimeLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.SearchingTimeLabel.Name = "SearchingTimeLabel";
             this.SearchingTimeLabel.Size = new System.Drawing.Size(80, 13);
@@ -96,7 +97,7 @@
             // TotalHitsLabel
             // 
             this.TotalHitsLabel.AutoSize = true;
-            this.TotalHitsLabel.Location = new System.Drawing.Point(29, 163);
+            this.TotalHitsLabel.Location = new System.Drawing.Point(29, 149);
             this.TotalHitsLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.TotalHitsLabel.Name = "TotalHitsLabel";
             this.TotalHitsLabel.Size = new System.Drawing.Size(50, 13);
@@ -106,7 +107,7 @@
             // SaveButton
             // 
             this.SaveButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.SaveButton.Location = new System.Drawing.Point(156, 673);
+            this.SaveButton.Location = new System.Drawing.Point(156, 726);
             this.SaveButton.Name = "SaveButton";
             this.SaveButton.Size = new System.Drawing.Size(105, 31);
             this.SaveButton.TabIndex = 7;
@@ -123,7 +124,7 @@
             this.SearchedResultView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.SearchedResultView.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCells;
             this.SearchedResultView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.SearchedResultView.Location = new System.Drawing.Point(3, 445);
+            this.SearchedResultView.Location = new System.Drawing.Point(4, 500);
             this.SearchedResultView.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.SearchedResultView.MultiSelect = false;
             this.SearchedResultView.Name = "SearchedResultView";
@@ -138,7 +139,7 @@
             // DisplayItenButton
             // 
             this.DisplayItenButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.DisplayItenButton.Location = new System.Drawing.Point(12, 673);
+            this.DisplayItenButton.Location = new System.Drawing.Point(12, 726);
             this.DisplayItenButton.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.DisplayItenButton.Name = "DisplayItenButton";
             this.DisplayItenButton.Size = new System.Drawing.Size(128, 31);
@@ -150,7 +151,7 @@
             // PreviousButton
             // 
             this.PreviousButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.PreviousButton.Location = new System.Drawing.Point(994, 673);
+            this.PreviousButton.Location = new System.Drawing.Point(994, 726);
             this.PreviousButton.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.PreviousButton.Name = "PreviousButton";
             this.PreviousButton.Size = new System.Drawing.Size(70, 31);
@@ -162,7 +163,7 @@
             // NextButton
             // 
             this.NextButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.NextButton.Location = new System.Drawing.Point(1079, 673);
+            this.NextButton.Location = new System.Drawing.Point(1079, 726);
             this.NextButton.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.NextButton.Name = "NextButton";
             this.NextButton.Size = new System.Drawing.Size(70, 31);
@@ -187,9 +188,9 @@
             this.IndexingBox.Controls.Add(this.SubmitButton);
             this.IndexingBox.Controls.Add(this.CollectionButton);
             this.IndexingBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.IndexingBox.Location = new System.Drawing.Point(0, 0);
+            this.IndexingBox.Location = new System.Drawing.Point(0, 1);
             this.IndexingBox.Name = "IndexingBox";
-            this.IndexingBox.Size = new System.Drawing.Size(506, 442);
+            this.IndexingBox.Size = new System.Drawing.Size(506, 496);
             this.IndexingBox.TabIndex = 12;
             this.IndexingBox.TabStop = false;
             this.IndexingBox.Text = "Indexing";
@@ -211,7 +212,7 @@
             this.SearchingBox.Controls.Add(this.TotalHitsLabel);
             this.SearchingBox.Location = new System.Drawing.Point(0, 223);
             this.SearchingBox.Name = "SearchingBox";
-            this.SearchingBox.Size = new System.Drawing.Size(506, 200);
+            this.SearchingBox.Size = new System.Drawing.Size(506, 254);
             this.SearchingBox.TabIndex = 13;
             this.SearchingBox.TabStop = false;
             this.SearchingBox.Text = "Searching";
@@ -219,7 +220,7 @@
             // QueryExpansionCheckBox
             // 
             this.QueryExpansionCheckBox.AutoSize = true;
-            this.QueryExpansionCheckBox.Location = new System.Drawing.Point(30, 72);
+            this.QueryExpansionCheckBox.Location = new System.Drawing.Point(30, 64);
             this.QueryExpansionCheckBox.Name = "QueryExpansionCheckBox";
             this.QueryExpansionCheckBox.Size = new System.Drawing.Size(91, 17);
             this.QueryExpansionCheckBox.TabIndex = 21;
@@ -229,7 +230,7 @@
             // LoadDatabaseButton
             // 
             this.LoadDatabaseButton.AutoSize = true;
-            this.LoadDatabaseButton.Location = new System.Drawing.Point(127, 63);
+            this.LoadDatabaseButton.Location = new System.Drawing.Point(127, 56);
             this.LoadDatabaseButton.Name = "LoadDatabaseButton";
             this.LoadDatabaseButton.Size = new System.Drawing.Size(152, 33);
             this.LoadDatabaseButton.TabIndex = 20;
@@ -240,7 +241,7 @@
             // PhraseFormCheckbox
             // 
             this.PhraseFormCheckbox.AutoSize = true;
-            this.PhraseFormCheckbox.Location = new System.Drawing.Point(29, 104);
+            this.PhraseFormCheckbox.Location = new System.Drawing.Point(29, 97);
             this.PhraseFormCheckbox.Name = "PhraseFormCheckbox";
             this.PhraseFormCheckbox.Size = new System.Drawing.Size(85, 17);
             this.PhraseFormCheckbox.TabIndex = 14;
@@ -433,7 +434,7 @@
             // 
             // AutoParsing
             // 
-            this.AutoParsing.Location = new System.Drawing.Point(528, 674);
+            this.AutoParsing.Location = new System.Drawing.Point(515, 726);
             this.AutoParsing.Name = "AutoParsing";
             this.AutoParsing.Size = new System.Drawing.Size(172, 31);
             this.AutoParsing.TabIndex = 14;
@@ -447,7 +448,7 @@
             this.webBrowser1.Location = new System.Drawing.Point(6, 19);
             this.webBrowser1.MinimumSize = new System.Drawing.Size(20, 20);
             this.webBrowser1.Name = "webBrowser1";
-            this.webBrowser1.Size = new System.Drawing.Size(639, 633);
+            this.webBrowser1.Size = new System.Drawing.Size(639, 694);
             this.webBrowser1.TabIndex = 13;
             // 
             // groupBox1
@@ -455,7 +456,7 @@
             this.groupBox1.Controls.Add(this.webBrowser1);
             this.groupBox1.Location = new System.Drawing.Point(509, 1);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(651, 667);
+            this.groupBox1.Size = new System.Drawing.Size(651, 719);
             this.groupBox1.TabIndex = 14;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Search Result ";
@@ -464,7 +465,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1160, 716);
+            this.ClientSize = new System.Drawing.Size(1160, 769);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.IndexingBox);
             this.Controls.Add(this.AutoParsing);

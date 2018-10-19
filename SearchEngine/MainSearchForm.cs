@@ -211,8 +211,16 @@ namespace SearchEngine
                     results = searching.SearchIndex(IndexingClass.luceneIndexDirectory, IndexingClass.analyzer, inputQuery, PhraseFormCheckbox.Checked, StemCheckBox.Checked,  QueryExpansionCheckBox.Checked);
                     stopwatch.Stop();
 
-                    // Display Searching info                   
-                    FinalQueryLabel.Text = "Final query: " + SearchingClass.finalQueryDisplay;
+                    // Display Searching info                                       
+                    if (QueryExpansionCheckBox.Checked)
+                    {
+                        if (SearchingClass.finalExpandedQueryList.Count == 0)
+                            FinalQueryLabel.Text = "Final query: " + string.Join(", ", SearchingClass.queryList);
+                        else
+                            FinalQueryLabel.Text = "Final query: " + string.Join(", ", SearchingClass.finalExpandedQueryList);
+                    }
+                    else
+                        FinalQueryLabel.Text = "Final query: " + string.Join(", ", SearchingClass.queryList);
                     SearchingTimeLabel.Text = "Searching time: " + stopwatch.Elapsed.ToString();
                     TotalHitsLabel.Text = "Total hits: " + results.TotalHits;
 
@@ -246,23 +254,18 @@ namespace SearchEngine
         public void DisplayResult(TopDocs results, Document[] docs, int displayBatch)
         {
             // If not the last page
-
             if (displayBatch < results.TotalHits / 10)
             {
                 this.webBrowser1.Navigate("about:blank");
                 this.webBrowser1.Document.OpenNew(false);
 
                 webBrowser1.Document.Write("<html><body><Br/>");
-                //WebBrowser1.DocumentText = "<html><body><Br/>";
                 for (int i = 0; i < 10; i++)
                 {
                     int j = i + displayBatch * 10;
                     string title = docs[j].Get(IndexingClass.FieldTITLE).ToString().ToUpper();
-                    //WebBrowser1.DocumentText +=
-                    //string url = string.Format("<a href = {0} <script type = \"text/javascript\">  </script>>", '#');
 
                     webBrowser1.Document.Write(
-                  //"Document Title: <B><U><FONT COLOR=\"#0000FF\">" + docs[j].Get(IndexingClass.FieldTITLE).ToString().ToUpper() + "</FONT COLOR=\"#0000FF\"></U></B><Br/>" +
                   "<B><U><FONT COLOR=\"#0000FF\">" + title + "</a></FONT COLOR=\"#0000FF\"></U></B><Br/>" +
                   "Author: " + docs[j].Get(IndexingClass.FieldAUTHOR).ToString() + "<Br/>" +
                   "Bibliography: " + docs[j].Get(IndexingClass.FieldBIBLIO_INFO).ToString() + "<Br/><Br/>" +
@@ -270,7 +273,6 @@ namespace SearchEngine
                   docs[j].Get(IndexingClass.FieldABSTRACT).ToString().Split(new[] { " ." }, StringSplitOptions.RemoveEmptyEntries).FirstOrDefault() + "<Br/><Br/><Br/><Br/>");
                 }
 
-                //WebBrowser1.DocumentText += "</body></html>";
                 webBrowser1.Document.Write("</body></html>");
                 this.webBrowser1.Refresh();
 
@@ -278,22 +280,14 @@ namespace SearchEngine
                 dt.Columns.Add("No.", typeof(int));
                 dt.Columns.Add("Title", typeof(string));
                 dt.Columns.Add("Author", typeof(string));
-                //dt.Columns.Add("Biblio_info", typeof(string));
-                //dt.Columns.Add("Abstract", typeof(string));
 
                 for (int i = displayBatch * 10; i < displayBatch * 10 + 10; i++)
                 {
                     // Store the first sentence of the document
                     dt.Rows.Add(new object[] {i,
                                           docs[i].Get(IndexingClass.FieldTITLE).ToString(),
-                                          docs[i].Get(IndexingClass.FieldAUTHOR).ToString()//,
-                                                                                           //docs[i].Get(IndexingClass.FieldBIBLIO_INFO).ToString(),
-                                                                                           //docs[i].Get(IndexingClass.FieldABSTRACT).ToString().Split(new[] { " ." }, StringSplitOptions.RemoveEmptyEntries).FirstOrDefault()
-                                                });
+                                          docs[i].Get(IndexingClass.FieldAUTHOR).ToString()});
                     SearchedResultView.DataSource = dt;
-                    //ScoreDoc scoreDoc = results.ScoreDocs[i];
-                    //Lucene.Net.Documents.Document doc =
-                    //item_title = new ListViewItem(results);
                 }
 
                 // Modify column width only if datasource has data
@@ -306,11 +300,16 @@ namespace SearchEngine
             }
             if (displayBatch == results.TotalHits / 10)
             {
+                if (results.TotalHits < 10)
+                {
+                    this.webBrowser1.Navigate("about:blank");
+                    this.webBrowser1.Document.OpenNew(false);
+                }
                 webBrowser1.Document.Write("<html><body><Br/>");
                 for (int i = displayBatch * 10; i < results.TotalHits; i++)
                 {
                     int j = i;
-
+                   
                     //WebBrowser1.DocumentText +=
                     string url = string.Format("<a href=document_{0}", j);
                     webBrowser1.Document.Write(
@@ -326,23 +325,14 @@ namespace SearchEngine
                 dt.Columns.Add("No.", typeof(int));
                 dt.Columns.Add("Title", typeof(string));
                 dt.Columns.Add("Author", typeof(string));
-                //dt.Columns.Add("Biblio_info", typeof(string));
-                //dt.Columns.Add("Abstract", typeof(string));
 
                 for (int i = displayBatch * 10; i < results.TotalHits; i++)
                 {
                     // Store the first sentence of the document
                     dt.Rows.Add(new object[] {i,
                                           docs[i].Get(IndexingClass.FieldTITLE).ToString(),
-                                          docs[i].Get(IndexingClass.FieldAUTHOR).ToString()
-                        //docs[i].Get(IndexingClass.FieldBIBLIO_INFO).ToString(),
-                        //docs[i].Get(IndexingClass.FieldABSTRACT).ToString().Split(new[] { " ." }, StringSplitOptions.RemoveEmptyEntries).FirstOrDefault()
-                                            });
-                                          //docs[i].Get(IndexingClass.FieldABSTRACT).ToString().Split(new[] { '\r', '\n' }).FirstOrDefault()});
+                                          docs[i].Get(IndexingClass.FieldAUTHOR).ToString()});
                     SearchedResultView.DataSource = dt;
-                    //ScoreDoc scoreDoc = results.ScoreDocs[i];
-                    //Lucene.Net.Documents.Document doc =
-                    //item_title = new ListViewItem(results);
                 }
 
                 // Modify column width only if datasource has data

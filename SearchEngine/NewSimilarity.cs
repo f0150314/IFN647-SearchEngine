@@ -11,9 +11,7 @@ namespace SearchEngine
     {
         public override float Tf(float freq)
         {
-
-         
-            return (float) (freq);
+            return freq;
         }
     }
 }
