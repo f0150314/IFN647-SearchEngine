@@ -114,6 +114,12 @@
       <DependentUpon>MainSearchForm.cs</DependentUpon>
     </Compile>
     <Compile Include="SearchingClass.cs" />
+    <Compile Include="WikiSearch.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WikiSearch.Designer.cs">
+      <DependentUpon>WikiSearch.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="DisplayForm.resx">
       <DependentUpon>DisplayForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -135,6 +141,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="MainSearchForm.resx">
       <DependentUpon>MainSearchForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WikiSearch.resx">
+      <DependentUpon>WikiSearch.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">

@@ -16,7 +16,6 @@ namespace SearchEngine
         // Initialize class variables
         IndexSearcher searcher;
         MultiFieldQueryParser multi_field_query_parser;
-        //public static string finalQueryDisplay;
         public static List<string> queryList;
         public static List<string> finalExpandedQueryList;
         const Lucene.Net.Util.Version VERSION = Lucene.Net.Util.Version.LUCENE_30;
@@ -45,7 +44,18 @@ namespace SearchEngine
             multi_field_query_parser = new MultiFieldQueryParser(VERSION, new string [] { IndexingClass.FieldTITLE, IndexingClass.FieldAUTHOR, IndexingClass.FieldBIBLIO_INFO, IndexingClass.FieldABSTRACT}, analyzer);
 
             // User information needs -> Query query
-            BooleanQuery query = (BooleanQuery)multi_field_query_parser.Parse(queryText.ToLower());
+            BooleanQuery query;         
+            if (!MainSearchForm.wikiThesaurus.ContainsKey(queryText))
+                query = (BooleanQuery)multi_field_query_parser.Parse(queryText.ToLower());
+            
+            // WikiExpansion testing
+            else
+            {
+                string[] expandedQueries;
+                MainSearchForm.wikiThesaurus.TryGetValue(queryText, out expandedQueries);
+                string finalWikiExpandedQuery = string.Join(" ", expandedQueries);
+                query = (BooleanQuery)multi_field_query_parser.Parse(finalWikiExpandedQuery);
+            }
             Console.WriteLine(query);
 
             queryList = new List<string>();
@@ -201,12 +211,8 @@ namespace SearchEngine
             {
                 ranked_doc[ranking] = searcher.Doc(scoreDoc.Doc);
                 ranking++;
-
-                // Retrieve the doc and display the text(abstract)
-                //Document doc = searcher.Doc(scoreDoc.Doc);
-                //string myFieldValue = doc.Get(TEXT_FN).ToString();
             }
             return ranked_doc;
-        }
+        }       
     }
 }

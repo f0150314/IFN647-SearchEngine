@@ -38,6 +38,7 @@
             this.NextButton = new System.Windows.Forms.Button();
             this.IndexingBox = new System.Windows.Forms.GroupBox();
             this.SearchingBox = new System.Windows.Forms.GroupBox();
+            this.WikiExpansionButton = new System.Windows.Forms.Button();
             this.QueryExpansionCheckBox = new System.Windows.Forms.CheckBox();
             this.LoadDatabaseButton = new System.Windows.Forms.Button();
             this.PhraseFormCheckbox = new System.Windows.Forms.CheckBox();
@@ -201,6 +202,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.SearchingBox.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.SearchingBox.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.SearchingBox.Controls.Add(this.WikiExpansionButton);
             this.SearchingBox.Controls.Add(this.QueryExpansionCheckBox);
             this.SearchingBox.Controls.Add(this.LoadDatabaseButton);
             this.SearchingBox.Controls.Add(this.PhraseFormCheckbox);
@@ -217,6 +219,16 @@
             this.SearchingBox.TabStop = false;
             this.SearchingBox.Text = "Searching";
             // 
+            // WikiExpansionButton
+            // 
+            this.WikiExpansionButton.Location = new System.Drawing.Point(273, 56);
+            this.WikiExpansionButton.Name = "WikiExpansionButton";
+            this.WikiExpansionButton.Size = new System.Drawing.Size(110, 33);
+            this.WikiExpansionButton.TabIndex = 22;
+            this.WikiExpansionButton.Text = "WikiExpansion";
+            this.WikiExpansionButton.UseVisualStyleBackColor = true;
+            this.WikiExpansionButton.Click += new System.EventHandler(this.WikiExpansionButton_Click);
+            // 
             // QueryExpansionCheckBox
             // 
             this.QueryExpansionCheckBox.AutoSize = true;
@@ -232,7 +244,7 @@
             this.LoadDatabaseButton.AutoSize = true;
             this.LoadDatabaseButton.Location = new System.Drawing.Point(127, 56);
             this.LoadDatabaseButton.Name = "LoadDatabaseButton";
-            this.LoadDatabaseButton.Size = new System.Drawing.Size(152, 33);
+            this.LoadDatabaseButton.Size = new System.Drawing.Size(134, 33);
             this.LoadDatabaseButton.TabIndex = 20;
             this.LoadDatabaseButton.Text = "Load Wordnet Database";
             this.LoadDatabaseButton.UseVisualStyleBackColor = true;
@@ -529,5 +541,6 @@
         private System.Windows.Forms.Label AnalyzseLabel;
         private System.Windows.Forms.WebBrowser webBrowser1;
         private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.Button WikiExpansionButton;
     }
 }

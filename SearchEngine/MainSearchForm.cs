@@ -12,6 +12,10 @@ using Lucene.Net.Documents;
 using System.Diagnostics;
 using System.IO;
 using Syn.WordNet;
+using System.Net;
+using System.Xml;
+using System.Text.RegularExpressions;
+
 
 namespace SearchEngine
 {
@@ -27,6 +31,7 @@ namespace SearchEngine
         int selectedItem;
         int displayBatch;
         string inputQuery = null;
+        public static Dictionary<string, string[]> wikiThesaurus = new Dictionary<string, string[]>();
         public static WordNetEngine wordNet = new WordNetEngine();
         public static Document[] ranked_docs;
         public static TopDocs results;
@@ -43,6 +48,7 @@ namespace SearchEngine
             BibliBoostBox.Enabled = false;
             AbstractBoostBox.Enabled = false;
             LoadDatabaseButton.Enabled = false;
+            WikiExpansionButton.Enabled = false;
             TitleBoostBox.Text = "1.0";
             AuthorBoostBox.Text = "1.0";
             BibliBoostBox.Text = "1.0";
@@ -173,9 +179,13 @@ namespace SearchEngine
             {
                 MessageBox.Show("Please load wordnet database");
                 LoadDatabaseButton.Enabled = true;
+                WikiExpansionButton.Enabled = true;
             }
             else
+            {
                 LoadDatabaseButton.Enabled = false;
+                WikiExpansionButton.Enabled = false;
+            }
         }
 
         // Load wordnet data
@@ -212,7 +222,7 @@ namespace SearchEngine
                     stopwatch.Stop();
 
                     // Display Searching info                                       
-                    if (QueryExpansionCheckBox.Checked)
+                    if (QueryExpansionCheckBox.Checked && wordNet.IsLoaded)
                     {
                         if (SearchingClass.finalExpandedQueryList.Count == 0)
                             FinalQueryLabel.Text = "Final query: " + string.Join(", ", SearchingClass.queryList);
@@ -475,6 +485,42 @@ namespace SearchEngine
             }
             else
                 MessageBox.Show("You need to do indexing before generating the results");
+        }
+
+        // Advanced feature: Expanded query using Wikipedia (Example: bitcoin)
+        private void WikiExpansionButton_Click(object sender, EventArgs e)
+        {
+
+            var webclient = new WebClient();
+            var pageSourceCode = webclient.DownloadString("http://en.wikipedia.org/w/api.php?format=xml&action=query&prop=extracts&titles=" + QueryEnter.Text + "&redirects=true");
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(pageSourceCode);
+
+            var fnode = doc.GetElementsByTagName("extract")[0];
+
+            try
+            {
+                string ss = fnode.InnerText;
+                Regex regex = new Regex("\\<[^\\>]*\\>");
+                string.Format("Before:{0}", ss);
+                ss = regex.Replace(ss, string.Empty);
+                string result = String.Format(ss);
+                result = result.Split(new[] { "\n" }, StringSplitOptions.RemoveEmptyEntries)[0];
+                WikiSearch wiki = new WikiSearch(QueryEnter.Text, result);
+                wiki.Show();
+                CreateWikiThesaurus();
+            }
+            catch(Exception)
+            {
+                WikiSearch wiki = new WikiSearch(QueryEnter.Text, string.Empty);
+                wiki.Show();
+            }
+        }
+        // Create bitcoin dictionary
+        public void CreateWikiThesaurus()
+        {
+            string[] bitcoinSyn = { "bitcoin", "cryptocurrency", "\"electronic cash\"", "\"digital currency\"" };
+            wikiThesaurus.Add("bitcoin", bitcoinSyn);           
         }
     }
 }
