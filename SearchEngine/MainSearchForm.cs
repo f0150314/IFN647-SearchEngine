@@ -519,7 +519,7 @@ namespace SearchEngine
         // Create bitcoin dictionary
         public void CreateWikiThesaurus()
         {
-            string[] bitcoinSyn = { "bitcoin", "cryptocurrency", "\"electronic cash\"", "\"digital currency\"" };
+            string[] bitcoinSyn = { "bitcoin", "cryptocurrency", "\"electronic cash\"", "\"digital currency\"", "decentralised", "\"central bank\"" };
             wikiThesaurus.Add("bitcoin", bitcoinSyn);           
         }
     }
