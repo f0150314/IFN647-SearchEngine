@@ -48,7 +48,6 @@ namespace SearchEngine
             BibliBoostBox.Enabled = false;
             AbstractBoostBox.Enabled = false;
             LoadDatabaseButton.Enabled = false;
-            WikiExpansionButton.Enabled = false;
             TitleBoostBox.Text = "1.0";
             AuthorBoostBox.Text = "1.0";
             BibliBoostBox.Text = "1.0";
@@ -179,12 +178,10 @@ namespace SearchEngine
             {
                 MessageBox.Show("Please load wordnet database");
                 LoadDatabaseButton.Enabled = true;
-                WikiExpansionButton.Enabled = true;
             }
             else
             {
                 LoadDatabaseButton.Enabled = false;
-                WikiExpansionButton.Enabled = false;
             }
         }
 
