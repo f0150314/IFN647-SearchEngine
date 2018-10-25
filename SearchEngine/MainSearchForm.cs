@@ -23,7 +23,7 @@ namespace SearchEngine
     {
         IndexingClass indexing;
         SearchingClass searching;
-        Stopwatch stopwatch = new Stopwatch();
+        Stopwatch stopwatch;
 
         bool indexingState = false;
         bool selectIndexPathState = false;
@@ -149,7 +149,8 @@ namespace SearchEngine
                 if (AbstractBoostCheckBox.Checked)
                     abstractBoost = float.Parse(AbstractBoostBox.Text);
 
-                indexing = new IndexingClass();               
+                indexing = new IndexingClass();
+                stopwatch = new Stopwatch();
 
                 // Record indexing time
                 stopwatch.Restart();
@@ -211,6 +212,7 @@ namespace SearchEngine
                         inputQuery = QueryEnter.Text;
 
                     searching = new SearchingClass();
+                    stopwatch = new Stopwatch();
 
                     // Search the query against the index, the default return size is set to be 30
                     // retrieve the searching result TopDocs object
@@ -406,6 +408,9 @@ namespace SearchEngine
             saveInfoDialog.Filter = "Text File|*.txt";
             saveInfoDialog.Title = "Save Text File";
 
+            stopwatch = new Stopwatch();
+            string totalSearchTime = null;
+
             // Check if it has already indexed
             if (indexingState == true)
             {
@@ -435,8 +440,11 @@ namespace SearchEngine
                     foreach (var infoNeed in infoNeeds)
                     {
                         int rank = 0; 
-                        searching = new SearchingClass();
+                        searching = new SearchingClass();                        
+
+                        stopwatch.Start(); 
                         TopDocs infoResults = searching.SearchIndex(IndexingClass.luceneIndexDirectory, IndexingClass.analyzer, infoNeed, PhraseFormCheckbox.Checked, StemCheckBox.Checked, QueryExpansionCheckBox.Checked);
+                        stopwatch.Stop();
                         searching.ClearnUpSearcher();
 
                         // Check whether the specified file is already exists or not
@@ -482,6 +490,8 @@ namespace SearchEngine
             }
             else
                 MessageBox.Show("You need to do indexing before generating the results");
+
+            MessageBox.Show(stopwatch.Elapsed.ToString(), "Searching time");
         }
 
         // Advanced feature: Expanded query using Wikipedia (Example: bitcoin)
